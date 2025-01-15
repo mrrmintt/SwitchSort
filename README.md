@@ -1,2 +1,0 @@
-# SwitchSort
-Android game SwitchSort
