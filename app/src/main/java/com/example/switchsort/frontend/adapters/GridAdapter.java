@@ -6,6 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.view.MotionEvent;
+import android.graphics.Typeface;
+import androidx.core.content.res.ResourcesCompat;
+import android.view.animation.OvershootInterpolator;
+import androidx.core.content.ContextCompat;
+
+import com.example.switchsort.R;
 
 public class GridAdapter extends BaseAdapter {
     private Context context;
@@ -21,19 +28,48 @@ public class GridAdapter extends BaseAdapter {
         this.onClickListener = clickListener;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Button button;
         if (convertView == null) {
             button = new Button(context);
 
-            // Verwende die feste Größe für ALLE Buttons
-            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(BUTTON_SIZE, BUTTON_SIZE);
-            button.setLayoutParams(params);
-            button.setBackgroundColor(Color.GRAY);
+            // Button size
+            int buttonSize = 150;
+            button.setLayoutParams(new ViewGroup.LayoutParams(buttonSize, buttonSize));
+
+            // Style
+            button.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_button));
             button.setTextColor(Color.WHITE);
             button.setTextSize(24);
             button.setPadding(0, 0, 0, 0);
+
+            // Font
+            Typeface customFont = ResourcesCompat.getFont(context, R.font.pixar);  // replace 'pixar' with your font name
+            button.setTypeface(customFont);
+
+            // Animation beim Klicken
+            button.setOnTouchListener((v, event) -> {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        v.animate()
+                                .scaleX(0.9f)
+                                .scaleY(0.9f)
+                                .setDuration(100)
+                                .start();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        v.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(100)
+                                .start();
+                        break;
+                }
+                return false;
+            });
         } else {
             button = (Button) convertView;
         }

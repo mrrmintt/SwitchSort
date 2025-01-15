@@ -1,36 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="center"
+        android:adjustViewBounds="true"
+        android:contentDescription="Background image"/>
+    <ImageButton
+        android:id="@+id/settingsButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/settings"
+        android:background="@drawable/rounded_button"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        android:contentDescription="Settings"/>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SwitchSort"
-        android:textSize="32sp"
-        android:layout_marginBottom="32dp"/>
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:padding="16dp">
 
-    <Button
-        android:id="@+id/buttonEasy"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="Easy (3x3)"
-        android:layout_marginBottom="16dp"/>
+        <Button
+            android:id="@+id/buttonEasy"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Easy"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:background="@drawable/rounded_button"
+            android:layout_marginBottom="16dp"/>
 
-    <Button
-        android:id="@+id/buttonMedium"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="Medium (5x5)"
-        android:layout_marginBottom="16dp"/>
+        <Button
+            android:id="@+id/buttonMedium"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Medium"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:background="@drawable/rounded_button"
+            android:layout_marginBottom="16dp"/>
 
-    <Button
-        android:id="@+id/buttonHard"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:text="Hard (7x7)"
-        android:layout_marginBottom="16dp"/>
-</LinearLayout>
+        <Button
+            android:id="@+id/buttonHard"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Hard"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:background="@drawable/rounded_button"
+            android:layout_marginBottom="16dp"/>
+    </LinearLayout>
+</RelativeLayout>
