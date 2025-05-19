@@ -62,16 +62,16 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
 
-        // Hide ActionBar
+        // Get difficulty and game mode first
+        difficulty = getIntent().getStringExtra("DIFFICULTY");
+        isTimeRushMode = getIntent().getStringExtra("GAME_MODE").equals("TIME_RUSH");
+
+        // Set the correct layout based on game mode
+        setContentView(R.layout.activity_game);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-
-        // Get difficulty and game mode
-        difficulty = getIntent().getStringExtra("DIFFICULTY");
-        isTimeRushMode = getIntent().getStringExtra("GAME_MODE").equals("TIME_RUSH");
 
         // Initialize appropriate managers based on game mode
         if (isTimeRushMode) {
@@ -82,33 +82,25 @@ public class GameActivity extends AppCompatActivity {
             scoreManager = new ScoreManager(difficulty);
         }
 
-        // Initialize views
+
         initializeViews();
-
-        // Initialize initial game state
         initializeGameState();
-
-        // Setup game components
         setupGame();
-
-        // Start game music
         setupMusic();
     }
     private void initializeGameState() {
         if (isTimeRushMode) {
             TextView timerText = findViewById(R.id.timerText);
             timerText.setVisibility(View.VISIBLE);
-
-            // Generate initial number and display it
             String targetNumber = numberGenerator.generateTargetNumber();
-            targetLetterView.setText(targetNumber);
-
-            // Initialize displays
+            if (targetLetterView != null) {
+                targetLetterView.setText(targetNumber);
+                targetLetterView.setVisibility(View.VISIBLE);
+            }
             updateScoreDisplay();
             updateStreakDisplay();
             updateLivesDisplay();
             updateTimerDisplay();
-
             // Start timer after initial setup
             startTimeRushTimer();
         }
@@ -125,13 +117,15 @@ public class GameActivity extends AppCompatActivity {
                     if (timeRushManager.isGameOver()) {
                         showGameOverDialog();
                     } else {
-                        timerHandler.postDelayed(this, 100);  // Update every 0.1 seconds for smoother display
+                        timerHandler.postDelayed(this, 100);  // Update every 0.1 seconds
                     }
                 }
             }
         };
         timerHandler.postDelayed(timerRunnable, 100);
     }
+
+    //test
     public void onBackPressed() {
         if (!isPaused) {
             showPauseMenu();
@@ -153,9 +147,11 @@ public class GameActivity extends AppCompatActivity {
         TextView livesView = findViewById(R.id.livesView);
         TextView timerView = findViewById(R.id.timerText);
         ImageButton pauseButton = findViewById(R.id.pauseButton);
+        if (targetLetterView != null) {
+            targetLetterView.setVisibility(View.VISIBLE);
+        }
         pauseButton.setImageTintList(ColorStateList.valueOf(Color.WHITE));
         pauseButton.setOnClickListener(v -> showPauseMenu());
-        // Set text color and font for views
         Typeface pixarFont = ResourcesCompat.getFont(this, R.font.pixar);
         int textColor = Color.parseColor("#523502");
 
@@ -178,8 +174,6 @@ public class GameActivity extends AppCompatActivity {
             timerView.setTypeface(pixarFont);
             timerView.setTextColor(textColor);
         }
-
-        // Handle visibility based on game mode
         if (isTimeRushMode && timeRushManager != null) {
             if (roundCounterView != null) roundCounterView.setVisibility(View.GONE);
             if (livesView != null) {
@@ -193,17 +187,16 @@ public class GameActivity extends AppCompatActivity {
             if (timerView != null) timerView.setVisibility(View.GONE);
         }
     }
+
     private void showPauseMenu() {
         isPaused = true;
-
-        // Stop timer if in Time Rush mode
         if (isTimeRushMode) {
-            // Stop the timer updates
+            // Stop ...
         }
 
         pauseDialog = new Dialog(this);
         pauseDialog.setContentView(R.layout.dialog_pause_menu);
-        pauseDialog.setCancelable(false);  // Prevent dismissing by tapping outside
+        pauseDialog.setCancelable(false);
 
         Button resumeButton = pauseDialog.findViewById(R.id.resumeButton);
         Button mainMenuButton = pauseDialog.findViewById(R.id.mainMenuButton);
@@ -216,13 +209,12 @@ public class GameActivity extends AppCompatActivity {
     private void resumeGame() {
         isPaused = false;
         if (isTimeRushMode) {
-            // Resume timer updates
+            // Resume...
         }
         pauseDialog.dismiss();
     }
 
     private void goToMainMenu() {
-        // Stop any running timers/music
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -240,12 +232,14 @@ public class GameActivity extends AppCompatActivity {
         int gridSize = getGridSize();
         currentLetters = new String[gridSize * gridSize];
 
-        // Generate initial game state for Time Rush mode
         if (isTimeRushMode) {
             String targetNumber = numberGenerator.generateTargetNumber();
-            targetLetterView.setText(targetNumber);  // Set initial target
 
-            // Fill grid with initial numbers
+            if (targetLetterView != null) {
+                targetLetterView.setText(targetNumber);
+                targetLetterView.setVisibility(View.VISIBLE);
+            }
+
             int correctPosition = random.nextInt(currentLetters.length);
             for (int i = 0; i < currentLetters.length; i++) {
                 if (i == correctPosition) {
@@ -267,9 +261,10 @@ public class GameActivity extends AppCompatActivity {
         gridView.setNumColumns(gridSize);
         gridView.setAdapter(gridAdapter);
 
-        // Initialize displays
         updateScoreDisplay();
-        startNewRound();
+        if (!isTimeRushMode) {
+            startNewRound();
+        }
     }
     private void setupMusic() {
         mediaPlayer = MediaPlayer.create(this, R.raw.playground);
@@ -282,7 +277,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void updateLivesDisplay() {
-        TextView livesView = findViewById(R.id.livesView); // Make sure you have this in your layout
+        TextView livesView = findViewById(R.id.livesView);
         if (livesView != null) {
             livesView.setText("Lives: " + timeRushManager.getLives());
         }
@@ -314,20 +309,15 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void showFlash(boolean correct) {
-        // Setze die richtige Farbe
         flashOverlay.setBackground(
                 ContextCompat.getDrawable(this,
                         correct ? R.drawable.flash_correct : R.drawable.flash_wrong)
         );
-
-        // Zeige das Overlay
         flashOverlay.setVisibility(View.VISIBLE);
-        flashOverlay.setAlpha(0.7f);  // Start mit 70% Sichtbarkeit
-
-        // Animiere das Ausblenden
+        flashOverlay.setAlpha(0.7f);
         flashOverlay.animate()
                 .alpha(0f)
-                .setDuration(200)  // 200ms = 0.2 Sekunden
+                .setDuration(200)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
@@ -339,11 +329,11 @@ public class GameActivity extends AppCompatActivity {
 
     private void generateNewBoard() {
         if (isTimeRushMode) {
-            // Generate target number (always in English numbers)
             String targetNumber = numberGenerator.generateTargetNumber();
-            targetLetterView.setText(targetNumber);
-
-            // Fill grid with appropriate number format based on difficulty
+            if (targetLetterView != null) {
+                targetLetterView.setText(targetNumber);
+                targetLetterView.setVisibility(View.VISIBLE);
+            }
             int correctPosition = random.nextInt(currentLetters.length);
 
             for (int i = 0; i < currentLetters.length; i++) {
@@ -377,6 +367,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+
     private void showGameOverDialog() {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_game_over);
@@ -392,7 +383,7 @@ public class GameActivity extends AppCompatActivity {
         String playerName = getIntent().getStringExtra("PLAYER_NAME");
         String gameMode = isTimeRushMode ? "TIME_RUSH" : "CLASSIC";
 
-        Player player = new Player(playerName, deviceId, finalScore, difficulty, gameMode);  // Using finalScore here
+        Player player = new Player(playerName, deviceId, finalScore, difficulty, gameMode);
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         dbHelper.addScore(player);
@@ -430,7 +421,7 @@ public class GameActivity extends AppCompatActivity {
                 }
 
                 if (isCorrect) {
-                    timeRushManager.addTimeBonus();  // Add time bonus for correct answer
+                    timeRushManager.addTimeBonus();
                     showFlash(true);
                 } else {
                     timeRushManager.loseLife();
@@ -451,7 +442,7 @@ public class GameActivity extends AppCompatActivity {
                 generateNewBoard();
             }
         } else {
-            // Classic mode - no lives system
+
             boolean isCorrect = currentLetters[position].equals(String.valueOf(targetLetter));
             long timeSpent = (System.currentTimeMillis() - roundStartTime) / 1000;
 
@@ -472,7 +463,7 @@ public class GameActivity extends AppCompatActivity {
             if (isTimeRushMode) {
                 streakView.setText("Streak: " + timeRushManager.getCurrentStreak());
             } else {
-                streakView.setText("Streak: " + scoreManager.getStreak());  // Make sure ScoreManager has getStreak method
+                streakView.setText("Streak: " + scoreManager.getStreak());
             }
         }
     }
@@ -490,10 +481,10 @@ public class GameActivity extends AppCompatActivity {
     private char generateRandomLetter() {
         String letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         if (difficulty.equals("MEDIUM")) {
-            letters += "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ"; // Griechische Buchstaben
+            letters += "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
         } else if (difficulty.equals("HARD")) {
-            letters += "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ"; // Griechische Buchstaben
-            letters += "أبتثجحخدذرزسشصضطظعغفقكلمنهوي"; // Arabische Buchstaben
+            letters += "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
+            letters += "أبتثجحخدذرزسشصضطظعغفقكلمنهوي";
         }
         return letters.charAt(random.nextInt(letters.length()));
     }

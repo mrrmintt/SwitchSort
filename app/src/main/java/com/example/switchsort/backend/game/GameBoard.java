@@ -12,14 +12,11 @@ public class GameBoard {
         this.size = size;
         this.board = new char[size][size];
     }
-
     public void generateNewBoard(String difficulty) {
         CharacterGenerator generator = new CharacterGenerator(difficulty);
         targetCharacter = generator.generateTarget();
-
         // Zufällige Position für das Zielzeichen
         targetPosition = (int) (Math.random() * (size * size));
-
         // Brett mit zufälligen Zeichen füllen
         int currentPosition = 0;
         for (int i = 0; i < size; i++) {
@@ -33,7 +30,6 @@ public class GameBoard {
             }
         }
     }
-
     public char getCharacterAt(int position) {
         return board[position / size][position % size];
     }

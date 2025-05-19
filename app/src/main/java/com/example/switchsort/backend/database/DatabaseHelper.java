@@ -24,7 +24,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_SCORES + " (" +
@@ -33,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_DEVICE_ID + " TEXT, " +
                 COLUMN_SCORE + " INTEGER, " +
                 COLUMN_DIFFICULTY + " TEXT, " +
-                COLUMN_GAME_MODE + " TEXT)";  // Added game_mode column
+                COLUMN_GAME_MODE + " TEXT)";
         db.execSQL(createTable);
     }
 
@@ -43,24 +42,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCORES);
         onCreate(db);
     }
-
     public void addScore(Player player) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put(COLUMN_NAME, player.getName());
         values.put(COLUMN_DEVICE_ID, player.getDeviceId());
         values.put(COLUMN_SCORE, player.getScore());
         values.put(COLUMN_DIFFICULTY, player.getDifficulty());
         values.put(COLUMN_GAME_MODE, player.getGameMode());  // Added game mode
-
-        // Check for existing record
         Cursor cursor = db.query(TABLE_SCORES,
                 new String[]{COLUMN_SCORE},
                 COLUMN_DEVICE_ID + " = ? AND " + COLUMN_DIFFICULTY + " = ? AND " + COLUMN_GAME_MODE + " = ?",
                 new String[]{player.getDeviceId(), player.getDifficulty(), player.getGameMode()},
                 null, null, null);
-
         if (cursor.moveToFirst()) {
             int existingScore = cursor.getInt(0);
             if (player.getScore() > existingScore) {
@@ -77,7 +71,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
     }
-
     public List<Player> getTopScores(String difficulty, String gameMode, int limit) {
         List<Player> topPlayers = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();

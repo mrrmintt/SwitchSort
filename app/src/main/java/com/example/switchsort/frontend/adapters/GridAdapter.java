@@ -16,12 +16,12 @@ import com.example.switchsort.R;
 
 public class GridAdapter extends BaseAdapter {
     private Context context;
-    private String[] letters;  // Changed from char[] to String[]
+    private String[] letters;
     private int gridSize;
     private View.OnClickListener onClickListener;
-    private static final int BUTTON_SIZE = 150;  // Feste Größe für alle Buttons
+    private static final int BUTTON_SIZE = 150;
 
-    public GridAdapter(Context context, String[] letters, int gridSize, View.OnClickListener clickListener) {  // Changed parameter type
+    public GridAdapter(Context context, String[] letters, int gridSize, View.OnClickListener clickListener) {
         this.context = context;
         this.letters = letters;
         this.gridSize = gridSize;
@@ -33,21 +33,14 @@ public class GridAdapter extends BaseAdapter {
         Button button;
         if (convertView == null) {
             button = new Button(context);
-
-            // Button size
             int buttonSize = 150;
             button.setLayoutParams(new ViewGroup.LayoutParams(buttonSize, buttonSize));
-
-            // Style
             button.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_button));
             button.setTextColor(Color.WHITE);
             button.setPadding(0, 0, 0, 0);
 
-            // Font
             Typeface customFont = ResourcesCompat.getFont(context, R.font.pixar);
             button.setTypeface(customFont);
-
-            // Animation beim Klicken
             button.setOnTouchListener((v, event) -> {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
@@ -72,18 +65,17 @@ public class GridAdapter extends BaseAdapter {
             button = (Button) convertView;
         }
 
-        // Handle text content and size
-        String buttonText = letters[position];  // No need for String.valueOf anymore
-        button.setText(buttonText != null ? buttonText : "");  // Null check added
+        String buttonText = letters[position];
+        button.setText(buttonText != null ? buttonText : "");
 
-        // Adjust text size based on content length
+
         if (buttonText != null) {
             if (buttonText.length() > 3) {
-                button.setTextSize(16);  // Smallest size for long numbers (e.g., "XVIII")
+                button.setTextSize(16);
             } else if (buttonText.length() > 2) {
-                button.setTextSize(18);  // Medium size for 3-char numbers
+                button.setTextSize(18);
             } else {
-                button.setTextSize(24);  // Original size for 1-2 char numbers
+                button.setTextSize(24);
             }
         }
 

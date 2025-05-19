@@ -25,7 +25,7 @@
         android:scaleType="fitCenter"
         android:contentDescription="Settings"/>
 
-    <!-- Buttons Layout ZUERST definieren -->
+    <!-- Buttons Layout -->
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"

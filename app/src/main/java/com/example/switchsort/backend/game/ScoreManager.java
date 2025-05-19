@@ -11,28 +11,24 @@ public class ScoreManager {
         this.difficulty = difficulty;
         this.startTime = System.currentTimeMillis();
     }
-
     public void recordMatch(boolean correct, long timeSpentInSeconds) {
         if (correct) {
             int points = calculatePoints(timeSpentInSeconds);
             correctMatches++;
             streak++;
-
             // Add streak bonuses
             if (streak % 10 == 0) {
-                points += 200; // 10 streak bonus
+                points += 200; // 10 streak
             } else if (streak % 5 == 0) {
-                points += 100; // 5 streak bonus
+                points += 100; // 5 streak
             } else if (streak % 3 == 0) {
-                points += 50;  // 3 streak bonus
+                points += 50;  // 3 streak
             }
-
             currentScore += points;
         } else {
-            streak = 0; // Reset streak on wrong answer
+            streak = 0;
         }
     }
-
     private int calculatePoints(long timeSpentInSeconds) {
         int basePoints = 100;
         float multiplier = getDifficultyMultiplier();
@@ -40,7 +36,6 @@ public class ScoreManager {
 
         return (int)(basePoints * multiplier * speedMultiplier);
     }
-
     private float getDifficultyMultiplier() {
         switch (difficulty) {
             case "HARD":
@@ -51,7 +46,6 @@ public class ScoreManager {
                 return 1.0f;
         }
     }
-
     private float getSpeedMultiplier(long timeSpentInSeconds) {
         switch (difficulty) {
             case "HARD":
@@ -70,19 +64,16 @@ public class ScoreManager {
                 return 1.0f;
         }
     }
-
     public void addPerfectRoundBonus(boolean isGameComplete) {
         if (isGameComplete && correctMatches == 20) {
-            currentScore += 1000; // Perfect game bonus
+            currentScore += 1000;
         } else if (correctMatches == 10) {
-            currentScore += 500;  // Perfect first half bonus
+            currentScore += 500;
         }
     }
-
     public int getCurrentScore() {
         return currentScore;
     }
-
     public int getStreak() {
         return streak;
     }

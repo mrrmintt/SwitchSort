@@ -15,33 +15,27 @@ public class TimeRushNumberGenerator {
         this.difficulty = difficulty;
     }
 
-    // This generates the number shown at the top (always in English numbers)
+
     public String generateTargetNumber() {
-        return String.valueOf(random.nextInt(21));  // 0-20
+        return String.valueOf(random.nextInt(21));
     }
 
-    // This generates the numbers shown on the buttons
+
     public String generateButtonNumber(String targetNumber) {
         int targetValue = Integer.parseInt(targetNumber);
 
         switch (difficulty) {
             case "MEDIUM":
-                // Latin numbers I to XX
                 if (targetValue == 0) {
-                    return "0";  // Zero in Latin numerals isn't a thing
+                    return "0";
                 }
                 return latinNumbers[targetValue - 1];
-
             case "HARD":
-                // Hex numbers 0-14
                 return Integer.toHexString(targetValue).toUpperCase();
-
             default: // EASY
-                return targetNumber;  // Just return the same number 0-20
+                return targetNumber;
         }
     }
-
-    // Helper method to convert latin number back to integer for comparison
     public static int convertLatinToNumber(String latin) {
         switch(latin) {
             case "I": return 1;

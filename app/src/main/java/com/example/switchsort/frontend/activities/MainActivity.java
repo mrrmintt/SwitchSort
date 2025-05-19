@@ -6,32 +6,31 @@ import android.os.Bundle;
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
-
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.media.MediaPlayer;  // Add this import
+import android.media.MediaPlayer;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-
 import com.example.switchsort.R;
 
 public class MainActivity extends AppCompatActivity {
-    private MediaPlayer mediaPlayer;  // Add this field
+    private MediaPlayer mediaPlayer;
     private EditText playerNameInput;
     private Button leaderboardButton;
     private Button classicButton;
     private Button timeRushButton;
     private String gameMode = "CLASSIC";
-    private float menuMusicVolume = 1.0f;    // Deklaration der Menümusik-Lautstärke
-    private static float gameMusicVolume = 1.0f;  // Deklaration der Spielmusik-Lautstärke als static
+    private float menuMusicVolume = 1.0f;
+    private static float gameMusicVolume = 1.0f;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Hide ActionBar (remove the black box)
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         setupDifficultyButtons();
         ImageButton settingsButton = findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(v -> showSettingsDialog());
-
         setupButtonAnimation(settingsButton);
     }
 
@@ -47,19 +45,13 @@ public class MainActivity extends AppCompatActivity {
         Button easyButton = findViewById(R.id.buttonEasy);
         Button mediumButton = findViewById(R.id.buttonMedium);
         Button hardButton = findViewById(R.id.buttonHard);
-
-        // Custom Font für alle Buttons
-        Typeface customFont = ResourcesCompat.getFont(this, R.font.pixar);  // Stelle sicher, dass deine Font hier richtig benannt ist
+        Typeface customFont = ResourcesCompat.getFont(this, R.font.pixar);
         easyButton.setTypeface(customFont);
         mediumButton.setTypeface(customFont);
         hardButton.setTypeface(customFont);
-
-        // Click Animation für alle Buttons
         setupButtonAnimation(easyButton);
         setupButtonAnimation(mediumButton);
         setupButtonAnimation(hardButton);
-
-        // Click Listener
         easyButton.setOnClickListener(v -> startGame("EASY"));
         mediumButton.setOnClickListener(v -> startGame("MEDIUM"));
         hardButton.setOnClickListener(v -> startGame("HARD"));
@@ -70,23 +62,18 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LeaderboardActivity.class);
             startActivity(intent);
         });
-        // Setup game mode buttons
+
         classicButton = findViewById(R.id.buttonClassic);
         timeRushButton = findViewById(R.id.buttonTimeRush);
-
-        // Set custom font
         classicButton.setTypeface(customFont);
         timeRushButton.setTypeface(customFont);
 
-        // Setup animations
         setupButtonAnimation(classicButton);
         setupButtonAnimation(timeRushButton);
 
-        // Setup click listeners
         classicButton.setOnClickListener(v -> setGameMode("CLASSIC"));
         timeRushButton.setOnClickListener(v -> setGameMode("TIME_RUSH"));
 
-        // Initial state
         updateGameModeButtons();
     }
     private void setGameMode(String mode) {
@@ -118,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // Add these lifecycle methods to handle the music properly
     @Override
     protected void onPause() {
         super.onPause();
@@ -130,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Initialize and start music if it's not already playing
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(this, R.raw.menu_music);
             mediaPlayer.setLooping(true);
@@ -149,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer = null;
         }
     }
-    private void setupButtonAnimation(View button) {  // Änderung von Button zu View
+    private void setupButtonAnimation(View button) {
         button.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -181,12 +166,8 @@ public class MainActivity extends AppCompatActivity {
 
         SeekBar menuMusicSeekBar = dialog.findViewById(R.id.menuMusicSeekBar);
         SeekBar gameMusicSeekBar = dialog.findViewById(R.id.gameMusicSeekBar);
-
-        // Set initial progress
         menuMusicSeekBar.setProgress((int)(menuMusicVolume * 100));
         gameMusicSeekBar.setProgress((int)(gameMusicVolume * 100));
-
-        // Handle menu music volume changes
         menuMusicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -203,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // Handle game music volume changes
+        //Volume changes
         gameMusicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -220,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    // Add getter for game music volume
     public static float getGameMusicVolume() {
         return gameMusicVolume;
     }
