@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="center"
+        android:adjustViewBounds="true"/>
+
+    <!-- Game Info Layout -->
+    <LinearLayout
+        android:id="@+id/gameInfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Lives -->
+        <LinearLayout
+            android:id="@+id/livesContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginEnd="16dp"/>
+
+        <!-- Timer -->
+        <TextView
+            android:id="@+id/timerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#523502"
+            android:textSize="24sp"
+            android:fontFamily="@font/pixar"/>
+    </LinearLayout>
+
+    <!-- Score Display -->
+    <TextView
+        android:id="@+id/scoreView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gameInfoLayout"
+        android:layout_centerHorizontal="true"
+        android:textColor="#523502"
+        android:textSize="24sp"
+        android:fontFamily="@font/pixar"/>
+
+    <!-- Target Number -->
+    <TextView
+        android:id="@+id/targetNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/gameGrid"
+        android:layout_marginBottom="50dp"
+        android:textSize="48sp"
+        android:textColor="#523502"
+        android:fontFamily="@font/pixar"/>
+
+    <!-- Grid -->
+    <GridView
+        android:id="@+id/gameGrid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        android:horizontalSpacing="8dp"
+        android:verticalSpacing="8dp"
+        android:gravity="center"/>
+
+</RelativeLayout>

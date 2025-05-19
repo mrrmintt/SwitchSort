@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.media.MediaPlayer;  // Add this import
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 
@@ -18,6 +19,11 @@ import com.example.switchsort.R;
 
 public class MainActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;  // Add this field
+    private EditText playerNameInput;
+    private Button leaderboardButton;
+    private Button classicButton;
+    private Button timeRushButton;
+    private String gameMode = "CLASSIC";
     private float menuMusicVolume = 1.0f;    // Deklaration der Menümusik-Lautstärke
     private static float gameMusicVolume = 1.0f;  // Deklaration der Spielmusik-Lautstärke als static
     @Override
@@ -29,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-
+        playerNameInput = findViewById(R.id.playerNameInput);
         setupDifficultyButtons();
         ImageButton settingsButton = findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(v -> showSettingsDialog());
@@ -57,17 +63,58 @@ public class MainActivity extends AppCompatActivity {
         easyButton.setOnClickListener(v -> startGame("EASY"));
         mediumButton.setOnClickListener(v -> startGame("MEDIUM"));
         hardButton.setOnClickListener(v -> startGame("HARD"));
+        leaderboardButton = findViewById(R.id.buttonLeaderboard);
+        leaderboardButton.setTypeface(customFont);
+        setupButtonAnimation(leaderboardButton);
+        leaderboardButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, LeaderboardActivity.class);
+            startActivity(intent);
+        });
+        // Setup game mode buttons
+        classicButton = findViewById(R.id.buttonClassic);
+        timeRushButton = findViewById(R.id.buttonTimeRush);
+
+        // Set custom font
+        classicButton.setTypeface(customFont);
+        timeRushButton.setTypeface(customFont);
+
+        // Setup animations
+        setupButtonAnimation(classicButton);
+        setupButtonAnimation(timeRushButton);
+
+        // Setup click listeners
+        classicButton.setOnClickListener(v -> setGameMode("CLASSIC"));
+        timeRushButton.setOnClickListener(v -> setGameMode("TIME_RUSH"));
+
+        // Initial state
+        updateGameModeButtons();
+    }
+    private void setGameMode(String mode) {
+        gameMode = mode;
+        updateGameModeButtons();
     }
 
+    private void updateGameModeButtons() {
+        classicButton.setAlpha(gameMode.equals("CLASSIC") ? 1.0f : 0.5f);
+        timeRushButton.setAlpha(gameMode.equals("TIME_RUSH") ? 1.0f : 0.5f);
+    }
     private void startGame(String difficulty) {
-        // Stop menu music before starting game
+        String playerName = playerNameInput.getText().toString().trim();
+        if (playerName.isEmpty()) {
+            playerNameInput.setError("Please enter your name");
+            return;
+        }
+
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
         }
+
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("DIFFICULTY", difficulty);
+        intent.putExtra("PLAYER_NAME", playerName);
+        intent.putExtra("GAME_MODE", gameMode);
         startActivity(intent);
     }
 

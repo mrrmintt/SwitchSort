@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="center"
+        android:adjustViewBounds="true"/>
+
+    <TextView
+        android:id="@+id/leaderboardTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Leaderboard"
+        android:textColor="#523502"
+        android:textSize="32sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"/>
+
+    <!-- Game Mode Buttons -->
+    <LinearLayout
+        android:id="@+id/gameModeButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/leaderboardTitle"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/leaderboardClassicButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Classic"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_button"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/leaderboardTimeRushButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time Rush"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_button"
+            android:layout_margin="8dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/difficultyButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gameModeButtons"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/leaderboardEasyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Easy"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_button"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/leaderboardMediumButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medium"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_button"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/leaderboardHardButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hard"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_button"
+            android:layout_margin="8dp"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/leaderboardList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/difficultyButtons"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="8dp"/>
+
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="Back button"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="16dp"
+        android:src="?attr/homeAsUpIndicator"
+        android:background="@drawable/rounded_button"
+        android:padding="12dp"
+        android:scaleType="fitCenter"/>
+</RelativeLayout>

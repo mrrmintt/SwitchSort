@@ -1,4 +1,4 @@
-package com.example.switchsort.frontend.backend.game;
+package com.example.switchsort.backend.game;
 
 public class GameManager {
     private final GameBoard gameBoard;

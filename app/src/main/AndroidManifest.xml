@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.switchsort">
-
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,6 +23,9 @@
         <!-- Your game activity -->
         <activity
             android:name=".frontend.activities.GameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".frontend.activities.LeaderboardActivity"
             android:exported="false" />
 
     </application>

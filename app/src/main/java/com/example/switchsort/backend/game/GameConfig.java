@@ -1,4 +1,4 @@
-package com.example.switchsort.frontend.backend.game;
+package com.example.switchsort.backend.game;
 
 public class GameConfig {
     public static final int EASY_GRID_SIZE = 3;
