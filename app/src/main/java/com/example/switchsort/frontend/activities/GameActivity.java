@@ -55,7 +55,7 @@ public class GameActivity extends AppCompatActivity {
     private TimeRushGameManager timeRushManager;
 
     private TimeRushNumberGenerator numberGenerator;
-    private Handler timerHandler = new Handler();
+    private Handler timerHandler;
     private Runnable timerRunnable;
     private boolean isPaused = false;
     private Dialog pauseDialog;
@@ -106,8 +106,8 @@ public class GameActivity extends AppCompatActivity {
         }
     }
     private void startTimeRushTimer() {
-        Handler timerHandler = new Handler();
-        Runnable timerRunnable = new Runnable() {
+        timerHandler = new Handler();
+        timerRunnable = new Runnable() {
             @Override
             public void run() {
                 if (!isFinishing() && timeRushManager != null && !timeRushManager.isGameOver() && !isPaused) {
@@ -117,7 +117,7 @@ public class GameActivity extends AppCompatActivity {
                     if (timeRushManager.isGameOver()) {
                         showGameOverDialog();
                     } else {
-                        timerHandler.postDelayed(this, 100);  // Update every 0.1 seconds
+                        timerHandler.postDelayed(this, 100);  // Update every 0.1 seconds for smoother display
                     }
                 }
             }
@@ -127,6 +127,7 @@ public class GameActivity extends AppCompatActivity {
 
     //test
     public void onBackPressed() {
+        super.onBackPressed();
         if (!isPaused) {
             showPauseMenu();
         }
@@ -190,9 +191,6 @@ public class GameActivity extends AppCompatActivity {
 
     private void showPauseMenu() {
         isPaused = true;
-        if (isTimeRushMode) {
-            // Stop ...
-        }
 
         pauseDialog = new Dialog(this);
         pauseDialog.setContentView(R.layout.dialog_pause_menu);
@@ -208,13 +206,18 @@ public class GameActivity extends AppCompatActivity {
     }
     private void resumeGame() {
         isPaused = false;
-        if (isTimeRushMode) {
-            // Resume...
+        if (isTimeRushMode && timerHandler != null && timerRunnable != null) {
+            timerHandler.postDelayed(timerRunnable, 100);
         }
         pauseDialog.dismiss();
     }
 
     private void goToMainMenu() {
+        // Stop any timer/music
+        if (timerHandler != null) {
+            timerHandler.removeCallbacks(timerRunnable);
+        }
+
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -232,26 +235,35 @@ public class GameActivity extends AppCompatActivity {
         int gridSize = getGridSize();
         currentLetters = new String[gridSize * gridSize];
 
+
         if (isTimeRushMode) {
             String targetNumber = numberGenerator.generateTargetNumber();
-
             if (targetLetterView != null) {
                 targetLetterView.setText(targetNumber);
                 targetLetterView.setVisibility(View.VISIBLE);
             }
 
             int correctPosition = random.nextInt(currentLetters.length);
+
+
             for (int i = 0; i < currentLetters.length; i++) {
                 if (i == correctPosition) {
+                    //the correct position
                     currentLetters[i] = numberGenerator.generateButtonNumber(targetNumber);
                 } else {
-                    String randomTarget = numberGenerator.generateTargetNumber();
-                    currentLetters[i] = numberGenerator.generateButtonNumber(randomTarget);
+                    String randomTarget;
+                    String buttonText;
+                    do {
+                        randomTarget = numberGenerator.generateTargetNumber();
+                        buttonText = numberGenerator.generateButtonNumber(randomTarget);
+                        // Keep generating until we get one that's different from the target
+                    } while (buttonText.equals(numberGenerator.generateButtonNumber(targetNumber)));
+
+                    currentLetters[i] = buttonText;
                 }
             }
         }
 
-        // Setup grid
         View.OnClickListener clickListener = v -> {
             int position = (int) v.getTag();
             checkAnswer(position);
@@ -260,7 +272,6 @@ public class GameActivity extends AppCompatActivity {
         gridAdapter = new GridAdapter(this, currentLetters, gridSize, clickListener);
         gridView.setNumColumns(gridSize);
         gridView.setAdapter(gridAdapter);
-
         updateScoreDisplay();
         if (!isTimeRushMode) {
             startNewRound();
@@ -304,7 +315,34 @@ public class GameActivity extends AppCompatActivity {
                     .start();
         }
 
-        generateNewBoard();
+        // Für Classic Mode
+        if (!isTimeRushMode) {
+            targetLetter = generateRandomLetter();
+            targetLetterView.setText(String.valueOf(targetLetter));
+
+            int correctPosition = random.nextInt(currentLetters.length);
+
+            for (int i = 0; i < currentLetters.length; i++) {
+                if (i == correctPosition) {
+                    currentLetters[i] = String.valueOf(targetLetter);
+                } else {
+                    char randomChar;
+
+                    do {
+                        randomChar = generateRandomLetter();
+                    } while (randomChar == targetLetter);
+
+                    currentLetters[i] = String.valueOf(randomChar);
+                }
+            }
+
+            if (gridView != null && gridView.getAdapter() != null) {
+                ((GridAdapter) gridView.getAdapter()).notifyDataSetChanged();
+            }
+        } else {
+            generateNewBoard(); //Time Rush Mode
+        }
+
         showTargetLetter();
     }
 
@@ -338,29 +376,40 @@ public class GameActivity extends AppCompatActivity {
 
             for (int i = 0; i < currentLetters.length; i++) {
                 if (i == correctPosition) {
+                    // This is the correct position
                     currentLetters[i] = numberGenerator.generateButtonNumber(targetNumber);
                 } else {
-                    String randomTarget = numberGenerator.generateTargetNumber();
-                    currentLetters[i] = numberGenerator.generateButtonNumber(randomTarget);
+                    // For all other positions, generate random numbers
+                    String randomTarget;
+                    String buttonText;
+
+                    do {
+                        randomTarget = numberGenerator.generateTargetNumber();
+                        buttonText = numberGenerator.generateButtonNumber(randomTarget);
+                    } while (buttonText.equals(numberGenerator.generateButtonNumber(targetNumber)));
+
+                    currentLetters[i] = buttonText;
                 }
             }
             gridAdapter.notifyDataSetChanged();
         } else {
-            // Classic mode code
             targetLetter = generateRandomLetter();
             targetLetterView.setText(String.valueOf(targetLetter));
 
             int correctPosition = random.nextInt(currentLetters.length);
-
             for (int i = 0; i < currentLetters.length; i++) {
                 if (i == correctPosition) {
                     currentLetters[i] = String.valueOf(targetLetter);
                 } else {
-                    currentLetters[i] = String.valueOf(generateRandomLetter());
+                    char randomChar;
+                    do {
+                        randomChar = generateRandomLetter();
+                    } while (randomChar == targetLetter);
+
+                    currentLetters[i] = String.valueOf(randomChar);
                 }
             }
         }
-
         // Update grid
         if (gridView != null && gridView.getAdapter() != null) {
             ((GridAdapter) gridView.getAdapter()).notifyDataSetChanged();

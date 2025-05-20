@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@drawable/rounded_button"
+    android:background="@drawable/rounded_dialog_background"
     android:gravity="center">
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:text="Resume Game"
         android:textColor="#FFFFFF"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_button_light"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/pixar"/>
 
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="Main Menu"
         android:textColor="#FFFFFF"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_button_light"
         android:fontFamily="@font/pixar"/>
 
 </LinearLayout>
