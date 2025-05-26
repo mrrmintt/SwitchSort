@@ -1,20 +1,20 @@
 package com.example.switchsort.backend.game;
 
-import com.example.switchsort.frontend.backend.utils.CharacterGenerator;
+
 
 public class GameBoard {
     private final int size;
-    private final char[][] board;
-    private char targetCharacter;
+    private final String[][] board;
+    private String targetCharacter;
     private int targetPosition;
 
     public GameBoard(int size) {
         this.size = size;
-        this.board = new char[size][size];
+        this.board = new String[size][size];
     }
-    public void generateNewBoard(String difficulty) {
-        CharacterGenerator generator = new CharacterGenerator(difficulty);
-        targetCharacter = generator.generateTarget();
+    public void generateNewBoard(String difficulty, String mode) {
+        RandomGenerator generator = new RandomGenerator(difficulty, mode);
+        targetCharacter = generator.generateRandom();
         // Zufällige Position für das Zielzeichen
         targetPosition = (int) (Math.random() * (size * size));
         // Brett mit zufälligen Zeichen füllen
@@ -24,17 +24,33 @@ public class GameBoard {
                 if (currentPosition == targetPosition) {
                     board[i][j] = targetCharacter;
                 } else {
-                    board[i][j] = generator.generateRandom();
+                    String value;
+                    do {
+                        value = generator.generateRandom();
+                    } while (value.equals(targetCharacter));
+                    board[i][j] = value;
                 }
                 currentPosition++;
             }
         }
     }
-    public char getCharacterAt(int position) {
+
+    public String[] getFlatBoard() {
+        String[] flat = new String[size * size];
+        int index = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                flat[index++] = board[i][j];
+            }
+        }
+        return flat;
+    }
+
+    public String getCharacterAt(int position) {
         return board[position / size][position % size];
     }
 
-    public char getTargetCharacter() {
+    public String getTargetCharacter() {
         return targetCharacter;
     }
 
@@ -45,4 +61,6 @@ public class GameBoard {
     public int getSize() {
         return size;
     }
+
+
 }

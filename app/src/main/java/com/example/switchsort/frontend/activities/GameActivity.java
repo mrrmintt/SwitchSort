@@ -34,7 +34,7 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
 
-
+/*
     private GridView gridView;
     private GridAdapter gridAdapter;
     private TextView targetLetterView;
@@ -59,6 +59,8 @@ public class GameActivity extends AppCompatActivity {
     private Runnable timerRunnable;
     private boolean isPaused = false;
     private Dialog pauseDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,51 +233,21 @@ public class GameActivity extends AppCompatActivity {
             scoreView.setText("Score: " + currentScore);
         }
     }
-    private void setupGame() {
-        int gridSize = getGridSize();
-        currentLetters = new String[gridSize * gridSize];
-
+    private void renderGameState(GameState state) {
+        gridAdapter.updateGrid(state.board);
+        targetLetterView.setText(state.target);
+        scoreView.setText("Score: " + state.score);
+        streakView.setText("Streak: " + state.streak);
+        roundCounterView.setText("Runde: " + state.round + "/" + state.totalRounds);
 
         if (isTimeRushMode) {
-            String targetNumber = numberGenerator.generateTargetNumber();
-            if (targetLetterView != null) {
-                targetLetterView.setText(targetNumber);
-                targetLetterView.setVisibility(View.VISIBLE);
-            }
-
-            int correctPosition = random.nextInt(currentLetters.length);
-
-
-            for (int i = 0; i < currentLetters.length; i++) {
-                if (i == correctPosition) {
-                    //the correct position
-                    currentLetters[i] = numberGenerator.generateButtonNumber(targetNumber);
-                } else {
-                    String randomTarget;
-                    String buttonText;
-                    do {
-                        randomTarget = numberGenerator.generateTargetNumber();
-                        buttonText = numberGenerator.generateButtonNumber(randomTarget);
-                        // Keep generating until we get one that's different from the target
-                    } while (buttonText.equals(numberGenerator.generateButtonNumber(targetNumber)));
-
-                    currentLetters[i] = buttonText;
-                }
-            }
+            updateLives(state.lives);
+            updateTimer(state.timerText);
         }
-
-        View.OnClickListener clickListener = v -> {
-            int position = (int) v.getTag();
-            checkAnswer(position);
-        };
-
-        gridAdapter = new GridAdapter(this, currentLetters, gridSize, clickListener);
-        gridView.setNumColumns(gridSize);
-        gridView.setAdapter(gridAdapter);
-        updateScoreDisplay();
-        if (!isTimeRushMode) {
-            startNewRound();
-        }
+    }
+    private void setupGame() {
+        gameManager.nextRound();
+        renderGameState(gameManager.getCurrentGameState());
     }
     private void setupMusic() {
         mediaPlayer = MediaPlayer.create(this, R.raw.playground);
@@ -294,57 +266,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void startNewRound() {
-        roundStartTime = System.currentTimeMillis();
-        currentRound++;
 
-        if (roundCounterView != null) {
-            roundCounterView.setText("Runde: " + currentRound + "/" + TOTAL_ROUNDS);
-
-            roundCounterView.animate()
-                    .scaleX(1.2f)
-                    .scaleY(1.2f)
-                    .setDuration(200)
-                    .withEndAction(() ->
-                            roundCounterView.animate()
-                                    .scaleX(1f)
-                                    .scaleY(1f)
-                                    .setDuration(200)
-                                    .start()
-                    )
-                    .start();
-        }
-
-        // Für Classic Mode
-        if (!isTimeRushMode) {
-            targetLetter = generateRandomLetter();
-            targetLetterView.setText(String.valueOf(targetLetter));
-
-            int correctPosition = random.nextInt(currentLetters.length);
-
-            for (int i = 0; i < currentLetters.length; i++) {
-                if (i == correctPosition) {
-                    currentLetters[i] = String.valueOf(targetLetter);
-                } else {
-                    char randomChar;
-
-                    do {
-                        randomChar = generateRandomLetter();
-                    } while (randomChar == targetLetter);
-
-                    currentLetters[i] = String.valueOf(randomChar);
-                }
-            }
-
-            if (gridView != null && gridView.getAdapter() != null) {
-                ((GridAdapter) gridView.getAdapter()).notifyDataSetChanged();
-            }
-        } else {
-            generateNewBoard(); //Time Rush Mode
-        }
-
-        showTargetLetter();
-    }
 
     private void showFlash(boolean correct) {
         flashOverlay.setBackground(
@@ -365,77 +287,13 @@ public class GameActivity extends AppCompatActivity {
                 .start();
     }
 
-    private void generateNewBoard() {
-        if (isTimeRushMode) {
-            String targetNumber = numberGenerator.generateTargetNumber();
-            if (targetLetterView != null) {
-                targetLetterView.setText(targetNumber);
-                targetLetterView.setVisibility(View.VISIBLE);
-            }
-            int correctPosition = random.nextInt(currentLetters.length);
-
-            for (int i = 0; i < currentLetters.length; i++) {
-                if (i == correctPosition) {
-                    // This is the correct position
-                    currentLetters[i] = numberGenerator.generateButtonNumber(targetNumber);
-                } else {
-                    // For all other positions, generate random numbers
-                    String randomTarget;
-                    String buttonText;
-
-                    do {
-                        randomTarget = numberGenerator.generateTargetNumber();
-                        buttonText = numberGenerator.generateButtonNumber(randomTarget);
-                    } while (buttonText.equals(numberGenerator.generateButtonNumber(targetNumber)));
-
-                    currentLetters[i] = buttonText;
-                }
-            }
-            gridAdapter.notifyDataSetChanged();
-        } else {
-            targetLetter = generateRandomLetter();
-            targetLetterView.setText(String.valueOf(targetLetter));
-
-            int correctPosition = random.nextInt(currentLetters.length);
-            for (int i = 0; i < currentLetters.length; i++) {
-                if (i == correctPosition) {
-                    currentLetters[i] = String.valueOf(targetLetter);
-                } else {
-                    char randomChar;
-                    do {
-                        randomChar = generateRandomLetter();
-                    } while (randomChar == targetLetter);
-
-                    currentLetters[i] = String.valueOf(randomChar);
-                }
-            }
-        }
-        // Update grid
-        if (gridView != null && gridView.getAdapter() != null) {
-            ((GridAdapter) gridView.getAdapter()).notifyDataSetChanged();
-        }
-    }
 
 
-    private void showGameOverDialog() {
+
+    private void showGameOverDialog(GameState state) {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_game_over);
-
-        TextView finalScoreView = dialog.findViewById(R.id.finalScore);
-
-        // Get the correct score based on game mode
-        int finalScore = isTimeRushMode ? timeRushManager.getScore() : scoreManager.getCurrentScore();
-        finalScoreView.setText("Final Score: " + finalScore);
-
-        // Save the correct score to database
-        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        String playerName = getIntent().getStringExtra("PLAYER_NAME");
-        String gameMode = isTimeRushMode ? "TIME_RUSH" : "CLASSIC";
-
-        Player player = new Player(playerName, deviceId, finalScore, difficulty, gameMode);
-
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        dbHelper.addScore(player);
+        ((TextView) dialog.findViewById(R.id.finalScore)).setText("Final Score: " + state.score);
 
         Button okButton = dialog.findViewById(R.id.okButton);
         okButton.setOnClickListener(v -> {
@@ -446,65 +304,13 @@ public class GameActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private void checkAnswer(int position) {
-        if (isTimeRushMode) {
-            String targetValue = targetLetterView.getText().toString();
-            String selectedValue = currentLetters[position];
-            boolean isCorrect = false;
+    private void handleAnswer(int position) {
+        gameManager.handleAnswer(position);
+        GameState state = gameManager.getCurrentGameState();
+        renderGameState(state);
 
-            try {
-                switch (difficulty) {
-                    case "MEDIUM":
-                        int targetNum = Integer.parseInt(targetValue);
-                        int selectedNum = TimeRushNumberGenerator.convertLatinToNumber(selectedValue);
-                        isCorrect = (targetNum == selectedNum);
-                        break;
-                    case "HARD":
-                        String targetHex = Integer.toHexString(Integer.parseInt(targetValue)).toUpperCase();
-                        String selectedHex = selectedValue.toUpperCase();
-                        isCorrect = selectedHex.equals(targetHex);
-                        break;
-                    default: // EASY
-                        isCorrect = selectedValue.equals(targetValue);
-                        break;
-                }
-
-                if (isCorrect) {
-                    timeRushManager.addTimeBonus();
-                    showFlash(true);
-                } else {
-                    timeRushManager.loseLife();
-                    showFlash(false);
-                    if (timeRushManager.isGameOver()) {
-                        showGameOverDialog();
-                        return;
-                    }
-                }
-
-                timeRushManager.addScore(isCorrect);
-                updateScoreDisplay();
-                updateStreakDisplay();
-                updateLivesDisplay();
-                generateNewBoard();
-
-            } catch (NumberFormatException e) {
-                generateNewBoard();
-            }
-        } else {
-
-            boolean isCorrect = currentLetters[position].equals(String.valueOf(targetLetter));
-            long timeSpent = (System.currentTimeMillis() - roundStartTime) / 1000;
-
-            scoreManager.recordMatch(isCorrect, timeSpent);
-            showFlash(isCorrect);
-            updateScoreDisplay();
-            updateStreakDisplay();
-            if (currentRound < TOTAL_ROUNDS) {
-                startNewRound();
-            } else {
-                scoreManager.addPerfectRoundBonus(true);
-                showGameOverDialog();
-            }
+        if (gameManager.isGameOver()) {
+            showGameOverDialog(state);
         }
     }
     private void updateStreakDisplay() {
@@ -579,4 +385,7 @@ public class GameActivity extends AppCompatActivity {
             mediaPlayer = null;
         }
     }
+}
+
+ */
 }

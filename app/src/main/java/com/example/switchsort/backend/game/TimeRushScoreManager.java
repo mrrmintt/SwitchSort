@@ -1,7 +1,7 @@
 package com.example.switchsort.backend.game;
 
-public class TimeRushScoreManager extends ScoreManager {
-    private static final int CORRECT_MATCH_POINTS = 100;
+//public class TimeRushScoreManager extends ScoreManager {
+    /*private static final int CORRECT_MATCH_POINTS = 100;
     private static final int PHASE_MULTIPLIER_1 = 1;
     private static final int PHASE_MULTIPLIER_2 = 2;
     private static final int PHASE_MULTIPLIER_3 = 3;
@@ -38,4 +38,6 @@ public class TimeRushScoreManager extends ScoreManager {
     public int getCurrentScore() {
         return currentScore;
     }
-}
+
+     */
+///}

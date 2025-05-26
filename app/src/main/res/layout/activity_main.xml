@@ -62,6 +62,31 @@
             android:background="@drawable/rounded_button"
             android:layout_marginBottom="16dp"/>
         <!-- Game Mode Buttons -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/buttonNumber"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Number"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/rounded_button"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/buttonLetter"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Letter"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/rounded_button"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

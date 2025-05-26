@@ -7,9 +7,12 @@ public class ScoreManager {
     private String difficulty;
     private long startTime;
 
-    public ScoreManager(String difficulty) {
+    private boolean isTimeRush;
+
+    public ScoreManager(String difficulty, boolean isTimeRush) {
         this.difficulty = difficulty;
         this.startTime = System.currentTimeMillis();
+        this.isTimeRush = isTimeRush;
     }
     public void recordMatch(boolean correct, long timeSpentInSeconds) {
         if (correct) {
@@ -64,13 +67,7 @@ public class ScoreManager {
                 return 1.0f;
         }
     }
-    public void addPerfectRoundBonus(boolean isGameComplete) {
-        if (isGameComplete && correctMatches == 20) {
-            currentScore += 1000;
-        } else if (correctMatches == 10) {
-            currentScore += 500;
-        }
-    }
+
     public int getCurrentScore() {
         return currentScore;
     }

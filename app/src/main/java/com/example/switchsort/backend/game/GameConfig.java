@@ -7,7 +7,6 @@ public class GameConfig {
     public static final int EASY_TIME_LIMIT = 10;
     public static final int MEDIUM_TIME_LIMIT = 5;
     public static final int HARD_TIME_LIMIT = 2;
-    public static final int ROUNDS_PER_GAME = 10;
 
     public static int getGridSize(String difficulty) {
         switch (difficulty.toUpperCase()) {
