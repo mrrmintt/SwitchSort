@@ -13,8 +13,11 @@ public class GameBoard {
         this.board = new String[size][size];
     }
     public void generateNewBoard(String difficulty, String mode) {
+        System.out.println("Board");
         RandomGenerator generator = new RandomGenerator(difficulty, mode);
+        System.out.println("TEst generator");
         targetCharacter = generator.generateRandom();
+        System.out.println("TEst generator"+ targetCharacter);
         // Zufällige Position für das Zielzeichen
         targetPosition = (int) (Math.random() * (size * size));
         // Brett mit zufälligen Zeichen füllen

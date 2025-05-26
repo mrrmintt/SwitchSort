@@ -37,7 +37,7 @@ public class GameActive extends AppCompatActivity {
     private GameManager gameManager;
     private GridAdapter gridAdapter;
     private GridView gridView;
-    private TextView targetLetterView, roundCounterView, scoreView, streakView, timerView, livesView;
+    private TextView targetLetterView, scoreView, streakView, timerView, livesView;
     private View flashOverlay;
     private ImageButton pauseButton;
     private Dialog pauseDialog;
@@ -61,22 +61,23 @@ public class GameActive extends AppCompatActivity {
         isTimeRushMode = "TIME_RUSH".equals(intent.getStringExtra("GAME_MODE"));
         symbol = intent.getStringExtra("MODE");
 
-
-
+        System.out.println("GameManager vor");
         gameManager = new GameManager(difficulty, symbol, isTimeRushMode);
-
+        System.out.println("GameManager nach");
 
         initializeViews();
         setupMusic();
         updateUI();
 
-        if (isTimeRushMode) startTimeRushTimer();
+        if (isTimeRushMode) {
+            startTimeRushTimer();
+        }
     }
 
     private void initializeViews() {
         gridView = findViewById(R.id.gameGrid);
         targetLetterView = findViewById(R.id.targetLetter);
-        roundCounterView = findViewById(R.id.roundCounter);
+
         scoreView = findViewById(R.id.scoreView);
         streakView = findViewById(R.id.streakView);
         timerView = findViewById(R.id.timerText);
@@ -86,7 +87,7 @@ public class GameActive extends AppCompatActivity {
 
         Typeface font = ResourcesCompat.getFont(this, R.font.pixar);
         int textColor = Color.parseColor("#523502");
-        for (TextView view : new TextView[]{targetLetterView, roundCounterView, scoreView, streakView, timerView, livesView}) {
+        for (TextView view : new TextView[]{targetLetterView, scoreView, streakView, timerView, livesView}) {
             if (view != null) {
                 view.setTypeface(font);
                 view.setTextColor(textColor);
@@ -99,6 +100,7 @@ public class GameActive extends AppCompatActivity {
 
     private void updateUI() {
         GameState state = gameManager.getCurrentGameState();
+        System.out.println("STATE:"+state.getTargetCharacter());
         gridAdapter = new GridAdapter(this, state.getBoard(), (int) Math.sqrt(state.getBoard().length), v -> {
             int pos = (int) v.getTag();
             boolean correct = gameManager.handleUserInput(pos);
@@ -118,11 +120,40 @@ public class GameActive extends AppCompatActivity {
         if (isTimeRushMode) {
             timerView.setText("Zeit: " + state.getTimerText());
             timerView.setVisibility(View.VISIBLE);
+
         } else {
             timerView.setVisibility(View.GONE);
         }
     }
 
+    private void startTimeRushTimer() {
+        timerHandler = new Handler();
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (!isFinishing() && gameManager != null && !gameManager.isGameOver() && !isPaused) {
+                    gameManager.updateTimer();
+                    updateTimerDisplay();
+
+                    if (gameManager.isGameOver()) {
+                        showGameOverDialog();
+                    } else {
+                        timerHandler.postDelayed(this, 100);  // Update every 0.1 seconds for smoother display
+                    }
+                }
+            }
+        };
+        timerHandler.postDelayed(timerRunnable, 100);
+    }
+
+    private void updateTimerDisplay() {
+        TextView timerView = findViewById(R.id.timerText);
+        if (timerView != null) {
+            timerView.setText("Time: " + gameManager.getCurrentTimeFormatted() + "s");
+        }
+    }
+
+    /*
     private void startTimeRushTimer() {
         timerHandler = new Handler();
         timerRunnable = new Runnable() {
@@ -136,6 +167,8 @@ public class GameActive extends AppCompatActivity {
         };
         timerHandler.postDelayed(timerRunnable, 100);
     }
+
+     */
 
     private void showPauseMenu() {
 

@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GameActive.class);
         intent.putExtra("DIFFICULTY", difficulty);
         intent.putExtra("PLAYER_NAME", playerName);
-        intent.putExtra("GAME_MODE", gameModeBoolean);
+        intent.putExtra("GAME_MODE", gameMode);
         intent.putExtra("MODE", gameContentMode);
         startActivity(intent);
     }
