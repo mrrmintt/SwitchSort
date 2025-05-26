@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private Button numberModeButton;
 
     private String gameMode = "CLASSIC"; // CLASSIC or TIME_RUSH
-    private String gameContentMode = "LETTER"; // LETTER or NUMBER
+    private String gameContentMode = "NUMBER"; // LETTER or NUMBER
 
     private float menuMusicVolume = 1.0f;
     private static float gameMusicVolume = 1.0f;

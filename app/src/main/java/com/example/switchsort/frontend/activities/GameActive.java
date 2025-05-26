@@ -39,7 +39,6 @@ public class GameActive extends AppCompatActivity {
     private GridView gridView;
     private TextView targetLetterView, roundCounterView, scoreView, streakView, timerView, livesView;
     private View flashOverlay;
-    private Button classicButton, timeRushButton, letterButton;
     private ImageButton pauseButton;
     private Dialog pauseDialog;
     private MediaPlayer mediaPlayer;
@@ -49,7 +48,7 @@ public class GameActive extends AppCompatActivity {
     private boolean isPaused = false;
     private boolean isTimeRushMode;
     private String difficulty;
-    private String symbol = "NUMBER"; // default to NUMBER and grayed out until user action
+    private String symbol; // default to NUMBER and grayed out until user action
     private ScoreManager scoreManager;
 
     @Override
@@ -60,11 +59,12 @@ public class GameActive extends AppCompatActivity {
         Intent intent = getIntent();
         difficulty = intent.getStringExtra("DIFFICULTY");
         isTimeRushMode = "TIME_RUSH".equals(intent.getStringExtra("GAME_MODE"));
+        symbol = intent.getStringExtra("MODE");
 
 
 
         gameManager = new GameManager(difficulty, symbol, isTimeRushMode);
-        scoreManager = new ScoreManager(difficulty, isTimeRushMode);
+
 
         initializeViews();
         setupMusic();
@@ -106,6 +106,8 @@ public class GameActive extends AppCompatActivity {
             updateUI();
             if (gameManager.isGameOver()) showGameOverDialog();
         });
+
+        gridView.setNumColumns((int) Math.sqrt(state.getBoard().length));
         gridView.setAdapter(gridAdapter);
 
         targetLetterView.setText("Ziel: " + state.getTargetCharacter());
@@ -136,6 +138,7 @@ public class GameActive extends AppCompatActivity {
     }
 
     private void showPauseMenu() {
+
         isPaused = true;
         pauseDialog = new Dialog(this);
         pauseDialog.setContentView(R.layout.dialog_pause_menu);
@@ -152,18 +155,24 @@ public class GameActive extends AppCompatActivity {
     }
 
     private void goToMainMenu() {
-        if (timerHandler != null) timerHandler.removeCallbacks(timerRunnable);
+        System.out.println("test1");
+        if (timerHandler != null) {
+            timerHandler.removeCallbacks(timerRunnable);
+        }
+
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
+            mediaPlayer = null;
         }
+        System.out.println("test2");
         finish();
     }
 
     private void showGameOverDialog() {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_game_over);
-        int finalScore = isTimeRushMode ? gameManager.getCurrentScore() : scoreManager.getCurrentScore();
+        int finalScore = gameManager.getCurrentScore();
         ((TextView) dialog.findViewById(R.id.finalScore)).setText("Final Score: " + finalScore);
 
         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -171,7 +180,8 @@ public class GameActive extends AppCompatActivity {
         String mode = isTimeRushMode ? "TIME_RUSH" : "CLASSIC";
         Player player = new Player(playerName, deviceId, finalScore, difficulty, mode);
 
-        new DatabaseHelper(this).addScore(player);
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.addScore(player);
 
         dialog.findViewById(R.id.okButton).setOnClickListener(v -> {
             dialog.dismiss();

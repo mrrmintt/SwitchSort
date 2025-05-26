@@ -29,12 +29,11 @@ public class RandomGenerator {
     //Wählt einen Random Character aus und macht in zu String
     public String generateTargetLetter() {
         switch (difficulty) {
-            case "EASY":
-                return String.valueOf(generateRandomChar(LATIN_CHARS + NUMBERS));
+
             case "MEDIUM":
-                return String.valueOf(generateRandomChar(LATIN_CHARS + GREEK_CHARS + NUMBERS));
+                return String.valueOf(generateRandomChar(GREEK_CHARS));
             case "HARD":
-                return String.valueOf(generateRandomChar(LATIN_CHARS + GREEK_CHARS + ARABIC_CHARS + NUMBERS));
+                return String.valueOf(generateRandomChar(ARABIC_CHARS));
             default:
                 return String.valueOf(generateRandomChar(LATIN_CHARS));
         }

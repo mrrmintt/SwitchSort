@@ -73,13 +73,11 @@
                 android:id="@+id/livesView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_margin="16dp"
-                android:textColor="#523502"
-                android:textSize="24sp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/pixar"
-                android:text="Lives: 3"/>
+                android:text="Lives: 3"
+                android:textColor="#523502"
+                android:textSize="24sp" />
         </LinearLayout>
 
         <!-- Target Letter -->
