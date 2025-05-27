@@ -206,6 +206,7 @@ public class GameActive extends AppCompatActivity {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_game_over);
         int finalScore = gameManager.getCurrentScore();
+        System.out.println("SCORE: "+ finalScore);
         ((TextView) dialog.findViewById(R.id.finalScore)).setText("Final Score: " + finalScore);
 
         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);

@@ -44,33 +44,61 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public void addScore(Player player) {
         SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, player.getName());
         values.put(COLUMN_DEVICE_ID, player.getDeviceId());
         values.put(COLUMN_SCORE, player.getScore());
         values.put(COLUMN_DIFFICULTY, player.getDifficulty());
-        values.put(COLUMN_GAME_MODE, player.getGameMode());  // Added game mode
-        Cursor cursor = db.query(TABLE_SCORES,
-                new String[]{COLUMN_SCORE},
-                COLUMN_DEVICE_ID + " = ? AND " + COLUMN_DIFFICULTY + " = ? AND " + COLUMN_GAME_MODE + " = ?",
-                new String[]{player.getDeviceId(), player.getDifficulty(), player.getGameMode()},
-                null, null, null);
-        if (cursor.moveToFirst()) {
-            int existingScore = cursor.getInt(0);
-            if (player.getScore() > existingScore) {
-                // Update if new score is higher
-                db.update(TABLE_SCORES, values,
-                        COLUMN_DEVICE_ID + " = ? AND " + COLUMN_DIFFICULTY + " = ? AND " + COLUMN_GAME_MODE + " = ?",
-                        new String[]{player.getDeviceId(), player.getDifficulty(), player.getGameMode()});
-            }
-        } else {
-            // Insert new record
+        values.put(COLUMN_GAME_MODE, player.getGameMode());
+
+        // Hol die Top 10 Einträge für diese Schwierigkeitsstufe + Spielmodus
+        Cursor cursor = db.query(
+                TABLE_SCORES,
+                null,
+                COLUMN_DIFFICULTY + " = ? AND " + COLUMN_GAME_MODE + " = ?",
+                new String[]{player.getDifficulty(), player.getGameMode()},
+                null,
+                null,
+                COLUMN_SCORE + " DESC",
+                "10"
+        );
+
+        int count = cursor.getCount();
+        boolean inserted = false;
+
+        if (count < 10) {
+            // Tabelle ist noch nicht voll → einfach einfügen
             db.insert(TABLE_SCORES, null, values);
+            inserted = true;
+        } else {
+            // Tabelle ist voll → schlechtesten Score finden
+            if (cursor.moveToLast()) {
+                int lowestScore = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SCORE));
+                if (player.getScore() > lowestScore) {
+                    int idToDelete = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
+
+                    // Schlechten Eintrag löschen
+                    db.delete(TABLE_SCORES, COLUMN_ID + " = ?", new String[]{String.valueOf(idToDelete)});
+
+                    // Neuen Score einfügen
+                    db.insert(TABLE_SCORES, null, values);
+                    inserted = true;
+                }
+            }
         }
 
         cursor.close();
         db.close();
+
+        if (inserted) {
+            System.out.println("Score wurde gespeichert.");
+        } else {
+            System.out.println("Score war zu schlecht – nicht gespeichert.");
+        }
     }
+
+
     public List<Player> getTopScores(String difficulty, String gameMode, int limit) {
         List<Player> topPlayers = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
