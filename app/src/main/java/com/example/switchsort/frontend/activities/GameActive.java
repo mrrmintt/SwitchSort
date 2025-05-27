@@ -248,6 +248,7 @@ public class GameActive extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        pauseDialog.dismiss();
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
