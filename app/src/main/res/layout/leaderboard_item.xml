@@ -13,7 +13,7 @@
         android:textColor="#FFFFFF"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:fontFamily="@font/pixar"/>
+        android:fontFamily="@font/rubik"/>
 
     <TextView
         android:id="@+id/nameText"
@@ -24,7 +24,7 @@
         android:layout_marginStart="32dp"
         android:layout_toEndOf="@id/rankText"
         android:layout_centerVertical="true"
-        android:fontFamily="@font/pixar"/>
+        android:fontFamily="@font/rubik"/>
 
     <TextView
         android:id="@+id/scoreText"
@@ -34,5 +34,5 @@
         android:textColor="#FFFFFF"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:fontFamily="@font/pixar"/>
+        android:fontFamily="@font/rubik"/>
 </RelativeLayout>

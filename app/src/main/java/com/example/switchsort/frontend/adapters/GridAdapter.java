@@ -33,30 +33,32 @@ public class GridAdapter extends BaseAdapter {
         Button button;
         if (convertView == null) {
             button = new Button(context);
-            int buttonSize = 150;
+
+            // Dynamische Buttongröße basierend auf Spielfeldgröße
+            int buttonSize;
+            if (gridSize == 7){
+                buttonSize = 120;
+            } else{
+                buttonSize = 150;
+            }
+
+
             button.setLayoutParams(new ViewGroup.LayoutParams(buttonSize, buttonSize));
             button.setBackground(ContextCompat.getDrawable(context, R.drawable.rounded_button));
             button.setTextColor(Color.WHITE);
             button.setPadding(0, 0, 0, 0);
 
-            Typeface customFont = ResourcesCompat.getFont(context, R.font.pixar);
+            Typeface customFont = ResourcesCompat.getFont(context, R.font.rubik);
             button.setTypeface(customFont);
+
             button.setOnTouchListener((v, event) -> {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        v.animate()
-                                .scaleX(0.9f)
-                                .scaleY(0.9f)
-                                .setDuration(100)
-                                .start();
+                        v.animate().scaleX(0.9f).scaleY(0.9f).setDuration(100).start();
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
-                        v.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .setDuration(100)
-                                .start();
+                        v.animate().scaleX(1f).scaleY(1f).setDuration(100).start();
                         break;
                 }
                 return false;
@@ -68,8 +70,8 @@ public class GridAdapter extends BaseAdapter {
         String buttonText = letters[position];
         button.setText(buttonText != null ? buttonText : "");
 
-
-        if (buttonText != null) {
+        // Schriftgröße nur relevant bei kleinen Feldern
+        if (gridSize < 7 && buttonText != null) {
             if (buttonText.length() > 3) {
                 button.setTextSize(16);
             } else if (buttonText.length() > 2) {
@@ -77,6 +79,9 @@ public class GridAdapter extends BaseAdapter {
             } else {
                 button.setTextSize(24);
             }
+        } else {
+            // Bei 7x7 sind es sowieso nur 1 Zeichen
+            button.setTextSize(24);
         }
 
         button.setTag(position);

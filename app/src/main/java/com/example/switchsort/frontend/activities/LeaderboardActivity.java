@@ -52,13 +52,13 @@ public class LeaderboardActivity extends AppCompatActivity {
         titleTextView = findViewById(R.id.leaderboardTitle);
 
         // Set custom font
-        Typeface pixarFont = ResourcesCompat.getFont(this, R.font.pixar);
-        easyButton.setTypeface(pixarFont);
-        mediumButton.setTypeface(pixarFont);
-        hardButton.setTypeface(pixarFont);
-        classicButton.setTypeface(pixarFont);
-        timeRushButton.setTypeface(pixarFont);
-        titleTextView.setTypeface(pixarFont);
+        Typeface rubikFont = ResourcesCompat.getFont(this, R.font.rubik);
+        easyButton.setTypeface(rubikFont);
+        mediumButton.setTypeface(rubikFont);
+        hardButton.setTypeface(rubikFont);
+        classicButton.setTypeface(rubikFont);
+        timeRushButton.setTypeface(rubikFont);
+        titleTextView.setTypeface(rubikFont);
         ImageButton backButton = findViewById(R.id.backButton);
         backButton.setImageTintList(ColorStateList.valueOf(Color.WHITE));
         backButton.setOnClickListener(v -> finish());

@@ -83,7 +83,7 @@ public class GameActive extends AppCompatActivity {
         flashOverlay = findViewById(R.id.flashOverlay);
         pauseButton = findViewById(R.id.pauseButton);
 
-        Typeface font = ResourcesCompat.getFont(this, R.font.pixar);
+        Typeface font = ResourcesCompat.getFont(this, R.font.rubik);
         int textColor = Color.parseColor("#523502");
         for (TextView view : new TextView[]{targetLetterView, scoreView, streakView, timerView, livesView}) {
             if (view != null) {
@@ -109,13 +109,13 @@ public class GameActive extends AppCompatActivity {
         gridView.setNumColumns((int) Math.sqrt(state.getBoard().length));
         gridView.setAdapter(gridAdapter);
 
-        targetLetterView.setText("Ziel: " + state.getTargetCharacter());
-        scoreView.setText("Punkte: " + state.getCurrentScore());
-        livesView.setText("Leben: " + state.getLives());
+        targetLetterView.setText( state.getTargetCharacter());
+        scoreView.setText("Points: " + state.getCurrentScore());
+        livesView.setText("Lives: " + state.getLives());
         streakView.setText("Streak: " + state.getStreak());
 
         if (isTimeRushMode) {
-            timerView.setText("Zeit: " + state.getTimerText());
+            timerView.setText("Time: " + state.getTimerText());
             timerView.setVisibility(View.VISIBLE);
 
         } else {

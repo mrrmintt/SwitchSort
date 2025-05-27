@@ -131,8 +131,8 @@
         android:layout_marginBottom="8dp"
         android:text="Your Name"
         android:textColor="#523502"
-        android:textSize="18sp"
-        android:fontFamily="@font/pixar"/>
+        android:textSize="25sp"
+        android:fontFamily="@font/rubik"/>
     <EditText
         android:id="@+id/playerNameInput"
         android:layout_width="200dp"
@@ -142,7 +142,7 @@
         android:layout_marginBottom="32dp"
         android:textColorHint="#523502"
         android:textColor="#523502"
-        android:fontFamily="@font/pixar"
+        android:fontFamily="@font/rubik"
         android:gravity="center"
         android:padding="12dp"
         android:maxLines="1"

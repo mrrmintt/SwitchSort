@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         Button mediumButton = findViewById(R.id.buttonMedium);
         Button hardButton = findViewById(R.id.buttonHard);
 
-        Typeface customFont = ResourcesCompat.getFont(this, R.font.pixar);
+        Typeface customFont = ResourcesCompat.getFont(this, R.font.rubik);
         easyButton.setTypeface(customFont);
         mediumButton.setTypeface(customFont);
         hardButton.setTypeface(customFont);
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         letterModeButton = findViewById(R.id.buttonLetter);
         numberModeButton = findViewById(R.id.buttonNumber);
 
-        Typeface customFont = ResourcesCompat.getFont(this, R.font.pixar);
+        Typeface customFont = ResourcesCompat.getFont(this, R.font.rubik);
         letterModeButton.setTypeface(customFont);
         numberModeButton.setTypeface(customFont);
 

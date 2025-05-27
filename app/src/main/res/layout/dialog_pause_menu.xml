@@ -13,7 +13,7 @@
         android:text="Pause"
         android:textColor="#FFFFFF"
         android:textSize="32sp"
-        android:fontFamily="@font/pixar"
+        android:fontFamily="@font/rubik"
         android:layout_marginBottom="32dp"/>
 
     <Button
@@ -24,7 +24,7 @@
         android:textColor="#FFFFFF"
         android:background="@drawable/rounded_button_light"
         android:layout_marginBottom="16dp"
-        android:fontFamily="@font/pixar"/>
+        android:fontFamily="@font/rubik"/>
 
     <Button
         android:id="@+id/mainMenuButton"
@@ -33,6 +33,6 @@
         android:text="Main Menu"
         android:textColor="#FFFFFF"
         android:background="@drawable/rounded_button_light"
-        android:fontFamily="@font/pixar"/>
+        android:fontFamily="@font/rubik"/>
 
 </LinearLayout>
