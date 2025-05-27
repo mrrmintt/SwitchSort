@@ -61,9 +61,7 @@ public class GameActive extends AppCompatActivity {
         isTimeRushMode = "TIME_RUSH".equals(intent.getStringExtra("GAME_MODE"));
         symbol = intent.getStringExtra("MODE");
 
-        System.out.println("GameManager vor");
         gameManager = new GameManager(difficulty, symbol, isTimeRushMode);
-        System.out.println("GameManager nach");
 
         initializeViews();
         setupMusic();
@@ -100,7 +98,6 @@ public class GameActive extends AppCompatActivity {
 
     private void updateUI() {
         GameState state = gameManager.getCurrentGameState();
-        System.out.println("STATE:"+state.getTargetCharacter());
         gridAdapter = new GridAdapter(this, state.getBoard(), (int) Math.sqrt(state.getBoard().length), v -> {
             int pos = (int) v.getTag();
             boolean correct = gameManager.handleUserInput(pos);
@@ -153,22 +150,6 @@ public class GameActive extends AppCompatActivity {
         }
     }
 
-    /*
-    private void startTimeRushTimer() {
-        timerHandler = new Handler();
-        timerRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (!isFinishing() && !isPaused) {
-                    updateUI();
-                    if (!gameManager.isGameOver()) timerHandler.postDelayed(this, 100);
-                }
-            }
-        };
-        timerHandler.postDelayed(timerRunnable, 100);
-    }
-
-     */
 
     private void showPauseMenu() {
 
@@ -188,7 +169,7 @@ public class GameActive extends AppCompatActivity {
     }
 
     private void goToMainMenu() {
-        System.out.println("test1");
+
         if (timerHandler != null) {
             timerHandler.removeCallbacks(timerRunnable);
         }
@@ -198,7 +179,7 @@ public class GameActive extends AppCompatActivity {
             mediaPlayer.release();
             mediaPlayer = null;
         }
-        System.out.println("test2");
+
         finish();
     }
 
@@ -206,7 +187,6 @@ public class GameActive extends AppCompatActivity {
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_game_over);
         int finalScore = gameManager.getCurrentScore();
-        System.out.println("SCORE: "+ finalScore);
         ((TextView) dialog.findViewById(R.id.finalScore)).setText("Final Score: " + finalScore);
 
         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -215,7 +195,10 @@ public class GameActive extends AppCompatActivity {
         Player player = new Player(playerName, deviceId, finalScore, difficulty, mode);
 
         DatabaseHelper dbHelper = new DatabaseHelper(this);
-        dbHelper.addScore(player);
+        // Nur wer auch Punkte erzielt hat, soll evtl. gespeichert werden
+        if (finalScore > 0){
+            dbHelper.addScore(player);
+        }
 
         dialog.findViewById(R.id.okButton).setOnClickListener(v -> {
             dialog.dismiss();

@@ -27,7 +27,7 @@ public class RandomGenerator {
     }
 
     //Wählt einen Random Character aus und macht in zu String
-    public String generateTargetLetter() {
+    public String generateLetter() {
         switch (difficulty) {
 
             case "MEDIUM":
@@ -42,7 +42,7 @@ public class RandomGenerator {
 
     // Lässt eine Zufallszahl egnerieren, wenn die Schwierigkeit Medium ist gibt es Römische Zahlen, bei Schwer
     // gibt es Hexadezimalzahlen und bei leicht einfach die Zahl
-    public String generateTargetNumber() {
+    public String generateNumber() {
         int targetNumber = generateRandomNumber();
 
         switch (difficulty) {
@@ -66,9 +66,9 @@ public class RandomGenerator {
     // Löst die Generierung eines zufälligen Symbols aus (Zahl oder Buchstabe)
     public String generateRandom() {
         if(mode.equals("LETTER")) {
-            return generateTargetLetter();
+            return generateLetter();
         } else {
-            return generateTargetNumber();
+            return generateNumber();
         }
     }
 
@@ -82,6 +82,10 @@ public class RandomGenerator {
         return random.nextInt(21);
     }
 
+    public String generateTargetNumberHex(String hex){
+        int back = Integer.parseInt(hex, 16);
+        return  String.valueOf(back);
+    }
 
     // Mapped normale Zahlen römischen zu
     public static int convertLatinToNumber(String latin) {

@@ -13,7 +13,7 @@ public class GameManager {
     private float currentTime;
     private final int timeLimitPerRound; // in Sekunden für TimeRush
     private boolean isGameOver;
-    private static final int INITIAL_TIME = 60;
+
 
     public GameManager(String difficulty, String mode, boolean gameMode) {
         this.difficulty = difficulty.toUpperCase();
@@ -24,7 +24,7 @@ public class GameManager {
         this.timeLimitPerRound = GameConfig.getTimeLimit(difficulty);
         this.gameBoard = new GameBoard(gridSize);
         this.scoreManager = new ScoreManager(difficulty, gameMode);
-        this.currentTime = INITIAL_TIME;
+        this.currentTime = GameConfig.getTimeLimit(difficulty);
         startNewRound();
     }
 
@@ -36,13 +36,10 @@ public class GameManager {
     }
 
     public boolean handleUserInput(int position) {
+        System.out.println("POSITION1:"+ position);
         long timeSpent = (System.currentTimeMillis() - roundStartTime) / 1000;
 
-        if (gameMode && timeSpent > timeLimitPerRound) {
-            // Zeit abgelaufen
-            lives = 0;
-            return false;
-        }
+
 
         boolean correct = gameBoard.checkPosition(position);
         scoreManager.recordMatch(correct, timeSpent);
@@ -65,7 +62,8 @@ public class GameManager {
 
     public boolean isGameOver() {
         if (gameMode) {
-            return lives <=0;
+            long timeSpent = (System.currentTimeMillis() - roundStartTime) / 1000;
+            return lives <=0 || currentTime==0;
         } else {
             return lives <= 0;
         }
@@ -79,7 +77,6 @@ public class GameManager {
         }
     }
     public GameState getCurrentGameState() {
-        System.out.println("CHARACTER:"+ gameBoard.getTargetCharacter());
         return new GameState(
                 gameBoard.getFlatBoard(),
                 gameBoard.getTargetCharacter(),
