@@ -154,7 +154,7 @@ public class GameActive extends AppCompatActivity {
     private void showPauseMenu() {
 
         isPaused = true;
-        pauseDialog = new Dialog(this);
+        pauseDialog = new Dialog(this, R.style.TransparentDialog);
         pauseDialog.setContentView(R.layout.dialog_pause_menu);
         pauseDialog.setCancelable(false);
         pauseDialog.findViewById(R.id.resumeButton).setOnClickListener(v -> resumeGame());

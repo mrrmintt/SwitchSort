@@ -23,6 +23,7 @@
         <!-- Your game activity -->
         <activity
             android:name=".frontend.activities.GameActive"
+            android:theme="@style/Theme.SwitchSort"
             android:exported="false" />
         <activity
             android:name=".frontend.activities.LeaderboardActivity"
