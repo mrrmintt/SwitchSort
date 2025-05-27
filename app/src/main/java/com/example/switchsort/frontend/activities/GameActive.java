@@ -84,7 +84,7 @@ public class GameActive extends AppCompatActivity {
         pauseButton = findViewById(R.id.pauseButton);
 
         Typeface font = ResourcesCompat.getFont(this, R.font.rubik);
-        int textColor = Color.parseColor("#523502");
+        int textColor = Color.parseColor("#FFFFFF");
         for (TextView view : new TextView[]{targetLetterView, scoreView, streakView, timerView, livesView}) {
             if (view != null) {
                 view.setTypeface(font);
@@ -248,7 +248,9 @@ public class GameActive extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        pauseDialog.dismiss();
+        if(pauseDialog != null && pauseDialog.isShowing()){
+            pauseDialog.dismiss();
+        }
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();

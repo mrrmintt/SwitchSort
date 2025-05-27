@@ -19,7 +19,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="150dp"
         android:layout_marginEnd="16dp"
-        android:textColor="#523502"
+        android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:fontFamily="@font/rubik"
         android:visibility="gone"/>
@@ -56,7 +56,7 @@
                 android:id="@+id/scoreView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#523502"
+                android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:fontFamily="@font/rubik"
                 android:text="Score: 0"/>
@@ -65,7 +65,7 @@
                 android:id="@+id/streakView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#523502"
+                android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:fontFamily="@font/rubik"
                 android:text="Streak: 0"/>
@@ -76,7 +76,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/rubik"
                 android:text="Lives: 3"
-                android:textColor="#523502"
+                android:textColor="#FFFFFF"
                 android:textSize="24sp" />
         </LinearLayout>
 
@@ -90,7 +90,7 @@
             android:layout_marginBottom="1dp"
             android:layout_marginTop="20dp"
             android:textSize="48sp"
-            android:textColor="#523502"/>
+            android:textColor="#FFFFFF"/>
 
         <!-- Grid with Buttons -->
         <GridView
@@ -117,7 +117,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
             android:text="Time: 30s"
-            android:textColor="#523502"
+            android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:fontFamily="@font/rubik"
             android:visibility="gone"/>

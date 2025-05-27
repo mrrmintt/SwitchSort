@@ -130,7 +130,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
         android:text="Your Name"
-        android:textColor="#523502"
+        android:textColor="#FFFFFF"
         android:textSize="25sp"
         android:fontFamily="@font/rubik"/>
     <EditText
@@ -140,8 +140,8 @@
         android:layout_above="@id/buttonLayout"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="32dp"
-        android:textColorHint="#523502"
-        android:textColor="#523502"
+        android:textColorHint="#FFFFFF"
+        android:textColor="#000000"
         android:fontFamily="@font/rubik"
         android:gravity="center"
         android:padding="12dp"
