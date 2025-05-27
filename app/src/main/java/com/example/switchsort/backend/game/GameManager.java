@@ -77,10 +77,22 @@ public class GameManager {
         }
     }
     public GameState getCurrentGameState() {
+        String target = gameBoard.getTargetCharacter();
+
+        // Konvertiere Hex zurück zu dezimal bei HARD + NUMBER
+        if (difficulty.equals("HARD") && mode.equals("NUMBER")) {
+            try {
+                int value = Integer.parseInt(target, 16);
+                target = String.valueOf(value);
+            } catch (NumberFormatException e) {
+                // Fallback – falls was schiefläuft
+                target = "?";
+            }
+        }
 
         return new GameState(
                 gameBoard.getFlatBoard(),
-                gameBoard.getTargetCharacter(),
+                target,
                 lives,
                 scoreManager.getCurrentScore(),
                 scoreManager.getStreak(),
