@@ -184,7 +184,7 @@ public class GameActive extends AppCompatActivity {
     }
 
     private void showGameOverDialog() {
-        Dialog dialog = new Dialog(this);
+        Dialog dialog = new Dialog(this, R.style.TransparentDialog);
         dialog.setContentView(R.layout.dialog_game_over);
         int finalScore = gameManager.getCurrentScore();
         ((TextView) dialog.findViewById(R.id.finalScore)).setText("Final Score: " + finalScore);
