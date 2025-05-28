@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         ImageButton settingsButton = findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(v -> showSettingsDialog());
         setupButtonAnimation(settingsButton);
+        setupMusic();
     }
 
     private void setupDifficultyButtons() {
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        boolean gameModeBoolean = gameMode.equals("TIME_RUSH");
+        //boolean gameModeBoolean = gameMode.equals("TIME_RUSH");
 
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -149,6 +150,23 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("GAME_MODE", gameMode);
         intent.putExtra("MODE", gameContentMode);
         startActivity(intent);
+    }
+
+    private void setupMusic() {
+        System.out.println("Geht zu Musik");
+        if (mediaPlayer == null) {
+            System.out.println("PLAYER NULL");
+            mediaPlayer = MediaPlayer.create(this, R.raw.menu_music);
+            if (mediaPlayer == null) {
+                System.err.println("FEHLER: MediaPlayer konnte nicht erstellt werden! Ist die Datei korrekt im raw-Ordner?");
+                return;
+            }
+            mediaPlayer.setLooping(true);
+            mediaPlayer.setVolume(menuMusicVolume, menuMusicVolume); // <- nutze richtige Lautstärke
+            mediaPlayer.start();
+        } else if (!mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+        }
     }
 
     @Override
