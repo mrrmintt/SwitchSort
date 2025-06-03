@@ -251,6 +251,21 @@ public class GameActive extends AppCompatActivity {
         }
     }
 
+    // Um über den Zürckbutton zum MainMenü zu kommen
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        // Spielmusik stoppen
+        musicManager.stopMusic();
+
+        // Menü-Musik vorbereiten
+        musicManager.setMenuBoolean(true); // oder wie auch immer du merkst, dass du im Menü bist
+        musicManager.setupMusic(this, true); // true → Menü-Musik
+
+        // Activity beenden → zurück zur MainActivity
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -266,7 +281,7 @@ public class GameActive extends AppCompatActivity {
             pauseDialog = null;
         }
 
-        musicManager.stopMusic();  // Sauberer Shutdown
+        //musicManager.onPause();  // Sauberer Shutdown
         System.out.println("ON DESTROY GAME");
     }
 }
