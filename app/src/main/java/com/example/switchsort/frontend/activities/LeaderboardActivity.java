@@ -105,4 +105,5 @@ public class LeaderboardActivity extends AppCompatActivity {
         LeaderboardAdapter adapter = new LeaderboardAdapter(this, topPlayers);
         leaderboardList.setAdapter(adapter);
     }
+
 }

@@ -15,6 +15,8 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 
 import com.example.switchsort.R;
+import com.example.switchsort.backend.game.GameManager;
+import com.example.switchsort.backend.game.MusicManager;
 
 public class MainActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
@@ -24,12 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private Button timeRushButton;
     private Button letterModeButton;
     private Button numberModeButton;
-
+    private static  MusicManager musicManager = new MusicManager();
     private String gameMode = "CLASSIC"; // CLASSIC or TIME_RUSH
     private String gameContentMode = "NUMBER"; // LETTER or NUMBER
-
-    private float menuMusicVolume = 1.0f;
-    private static float gameMusicVolume = 1.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
         ImageButton settingsButton = findViewById(R.id.settingsButton);
         settingsButton.setOnClickListener(v -> showSettingsDialog());
         setupButtonAnimation(settingsButton);
-        setupMusic();
+
+
+
+
     }
 
     private void setupDifficultyButtons() {
@@ -136,68 +138,17 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        //boolean gameModeBoolean = gameMode.equals("TIME_RUSH");
-
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
 
         Intent intent = new Intent(this, GameActive.class);
         intent.putExtra("DIFFICULTY", difficulty);
         intent.putExtra("PLAYER_NAME", playerName);
         intent.putExtra("GAME_MODE", gameMode);
         intent.putExtra("MODE", gameContentMode);
+
+
         startActivity(intent);
     }
 
-    private void setupMusic() {
-        System.out.println("Geht zu Musik");
-        if (mediaPlayer == null) {
-            System.out.println("PLAYER NULL");
-            mediaPlayer = MediaPlayer.create(this, R.raw.menu_music);
-            if (mediaPlayer == null) {
-                System.err.println("FEHLER: MediaPlayer konnte nicht erstellt werden! Ist die Datei korrekt im raw-Ordner?");
-                return;
-            }
-            mediaPlayer.setLooping(true);
-            mediaPlayer.setVolume(menuMusicVolume, menuMusicVolume); // <- nutze richtige Lautstärke
-            mediaPlayer.start();
-        } else if (!mediaPlayer.isPlaying()) {
-            mediaPlayer.start();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mediaPlayer != null) {
-            mediaPlayer.pause();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.menu_music);
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-        } else if (!mediaPlayer.isPlaying()) {
-            mediaPlayer.start();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-    }
 
     private void setupButtonAnimation(View button) {
         button.setOnTouchListener((v, event) -> {
@@ -225,15 +176,12 @@ public class MainActivity extends AppCompatActivity {
         SeekBar menuMusicSeekBar = dialog.findViewById(R.id.menuMusicSeekBar);
         SeekBar gameMusicSeekBar = dialog.findViewById(R.id.gameMusicSeekBar);
 
-        menuMusicSeekBar.setProgress((int)(menuMusicVolume * 100));
-        gameMusicSeekBar.setProgress((int)(gameMusicVolume * 100));
+        menuMusicSeekBar.setProgress((int)( musicManager.getMenuVolume()* 100));
+        gameMusicSeekBar.setProgress((int)(musicManager.getGameVolume() * 100));
 
         menuMusicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                menuMusicVolume = progress / 100f;
-                if (mediaPlayer != null) {
-                    mediaPlayer.setVolume(menuMusicVolume, menuMusicVolume);
-                }
+                musicManager.setMenuVolume(progress);
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
@@ -241,7 +189,8 @@ public class MainActivity extends AppCompatActivity {
 
         gameMusicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                gameMusicVolume = progress / 100f;
+                musicManager.setGameVolume(progress);
+                //gameMusicVolume = progress / 100f;
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
@@ -250,7 +199,59 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public static float getGameMusicVolume() {
-        return gameMusicVolume;
+    public static MusicManager getMusicManager(){
+        return musicManager;
     }
+
+    // LIFECYCLE
+
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        musicManager.onResume();
+        System.out.println("ON RESTART MAIN");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Wenn noch keine Musik läuft, dann wird der Player gestartet
+        if (!musicManager.isPlaying()) {
+            musicManager.setupMusic(this, true);  // Spiel-Musik starten
+            musicManager.setMenuBoolean(true);
+        }
+        System.out.println("ON START MAIN");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        musicManager.onResume();  // Musik weiterspielen wenn pausiert
+        System.out.println("ON RESUME MAIN");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        musicManager.onPause();  // Musik pausieren wenn Activity nicht mehr im Vordergrund
+        System.out.println("ON PAUS MAIN");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (musicManager.getMenuBoolean()){
+        // Muss onPause weil sonst wenn kurz aus App raus läuft Musik nicht weiter sonder startet neu
+        musicManager.onPause();
+        System.out.println("ON STOP MAIN");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        musicManager.stopMusic();  // Musik komplett stoppen, wenn Activity zerstört wird
+        System.out.println("ON DESTROY MAIN");
+    }
+
 }

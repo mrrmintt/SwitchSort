@@ -9,6 +9,7 @@ public class MusicManager {
     private float gameVolume;
     private float menuVolume;
 
+    private boolean isMenuBoolean;
     private MediaPlayer mediaPlayer;
 
 
@@ -19,6 +20,7 @@ public class MusicManager {
 
     }
 
+    // Startet Musik
     public void startMusic(){
         mediaPlayer.setLooping(true);
         mediaPlayer.setVolume(menuVolume, gameVolume);
@@ -26,7 +28,7 @@ public class MusicManager {
     }
 
 
-
+    // Checkt ob es einen Mediplayer gibt, wenn ja wird der zerstört und ein neuer Player mit der korrekten Musik wird erstellt
     public void setupMusic(Context context, boolean isMenu) {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -45,40 +47,48 @@ public class MusicManager {
         startMusic();
     }
 
-
+    // Gibt den MediaPlayer zurück
     public MediaPlayer getMediaPlayer(){
         return mediaPlayer;
     }
 
+    // Gibt wahr, wenn Mediaplayer definiert und spielt
     public boolean isPlaying() {
         return mediaPlayer != null && mediaPlayer.isPlaying();
     }
 
+    // Mediaplayer wird pausiert
     public void onPause() {
         if (mediaPlayer != null) mediaPlayer.pause();
     }
 
 
+    // Mediaplayer wird wieder gestartet
     public void onResume() {
         if (mediaPlayer != null) mediaPlayer.start();
     }
 
+    // Gibt Spielmusik lautstärke zurück
     public float getGameVolume() {
         return gameVolume;
     }
 
+    // Gibt Menü Musik Lautstärke zurück
     public float getMenuVolume() {
         return menuVolume;
     }
 
+    // Setzt Menü Lautstärke
     public void setMenuVolume(int progress){
         menuVolume = progress / 100f;
     }
 
+    // Setzt Spiel Lautstärke
     public void setGameVolume(int progress){
         gameVolume = progress / 100f;
     }
 
+    // Stopppt Musik komplett und setzt Player auf NULL
     public void stopMusic(){
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -86,6 +96,12 @@ public class MusicManager {
             mediaPlayer.release();
             mediaPlayer = null;
         }
+    }
+    public void setMenuBoolean(boolean isMenu){
+        isMenuBoolean = isMenu;
+    }
+    public boolean getMenuBoolean(){
+        return isMenuBoolean;
     }
 
 }

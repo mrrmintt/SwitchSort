@@ -29,6 +29,7 @@ import com.example.switchsort.backend.database.DatabaseHelper;
 import com.example.switchsort.backend.database.Player;
 import com.example.switchsort.backend.game.GameManager;
 import com.example.switchsort.backend.game.GameState;
+import com.example.switchsort.backend.game.MusicManager;
 import com.example.switchsort.backend.game.ScoreManager;
 import com.example.switchsort.frontend.adapters.GridAdapter;
 
@@ -41,15 +42,14 @@ public class GameActive extends AppCompatActivity {
     private View flashOverlay;
     private ImageButton pauseButton;
     private Dialog pauseDialog;
-    private MediaPlayer mediaPlayer;
     private Handler timerHandler;
     private Runnable timerRunnable;
 
     private boolean isPaused = false;
     private boolean isTimeRushMode;
     private String difficulty;
-    private String symbol; // default to NUMBER and grayed out until user action
-    private ScoreManager scoreManager;
+    private String symbol;
+    private MusicManager musicManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +62,11 @@ public class GameActive extends AppCompatActivity {
         symbol = intent.getStringExtra("MODE");
 
         gameManager = new GameManager(difficulty, symbol, isTimeRushMode);
+        musicManager = MainActivity.getMusicManager();
 
         initializeViews();
-        setupMusic();
+        //musicManager.setupMusic(this, false);
+        //musicManager.setMenuBoolean(false);// initiale Musik setzen
         updateUI();
 
         if (isTimeRushMode) {
@@ -75,7 +77,6 @@ public class GameActive extends AppCompatActivity {
     private void initializeViews() {
         gridView = findViewById(R.id.gameGrid);
         targetLetterView = findViewById(R.id.targetLetter);
-
         scoreView = findViewById(R.id.scoreView);
         streakView = findViewById(R.id.streakView);
         timerView = findViewById(R.id.timerText);
@@ -109,7 +110,7 @@ public class GameActive extends AppCompatActivity {
         gridView.setNumColumns((int) Math.sqrt(state.getBoard().length));
         gridView.setAdapter(gridAdapter);
 
-        targetLetterView.setText( state.getTargetCharacter());
+        targetLetterView.setText(state.getTargetCharacter());
         scoreView.setText("Points: " + state.getCurrentScore());
         livesView.setText("Lives: " + state.getLives());
         streakView.setText("Streak: " + state.getStreak());
@@ -117,7 +118,6 @@ public class GameActive extends AppCompatActivity {
         if (isTimeRushMode) {
             timerView.setText("Time: " + state.getTimerText());
             timerView.setVisibility(View.VISIBLE);
-
         } else {
             timerView.setVisibility(View.GONE);
         }
@@ -135,7 +135,7 @@ public class GameActive extends AppCompatActivity {
                     if (gameManager.isGameOver()) {
                         showGameOverDialog();
                     } else {
-                        timerHandler.postDelayed(this, 100);  // Update every 0.1 seconds for smoother display
+                        timerHandler.postDelayed(this, 100);
                     }
                 }
             }
@@ -144,15 +144,12 @@ public class GameActive extends AppCompatActivity {
     }
 
     private void updateTimerDisplay() {
-        TextView timerView = findViewById(R.id.timerText);
         if (timerView != null) {
             timerView.setText("Time: " + gameManager.getCurrentTimeFormatted() + "s");
         }
     }
 
-
     private void showPauseMenu() {
-
         isPaused = true;
         pauseDialog = new Dialog(this, R.style.TransparentDialog);
         pauseDialog.setContentView(R.layout.dialog_pause_menu);
@@ -164,22 +161,17 @@ public class GameActive extends AppCompatActivity {
 
     private void resumeGame() {
         isPaused = false;
-        if (isTimeRushMode) timerHandler.postDelayed(timerRunnable, 100);
-        pauseDialog.dismiss();
+        if (isTimeRushMode && timerHandler != null) {
+            timerHandler.postDelayed(timerRunnable, 100);
+        }
+        if (pauseDialog != null) pauseDialog.dismiss();
     }
 
     private void goToMainMenu() {
-
         if (timerHandler != null) {
             timerHandler.removeCallbacks(timerRunnable);
         }
-
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
-
+        musicManager.stopMusic();  // endgültiges Stoppen
         finish();
     }
 
@@ -194,27 +186,16 @@ public class GameActive extends AppCompatActivity {
         String mode = isTimeRushMode ? "TIME_RUSH" : "CLASSIC";
         Player player = new Player(playerName, deviceId, finalScore, difficulty, mode);
 
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-        // Nur wer auch Punkte erzielt hat, soll evtl. gespeichert werden
-        if (finalScore > 0){
-            dbHelper.addScore(player);
+        if (finalScore > 0) {
+            new DatabaseHelper(this).addScore(player);
         }
 
         dialog.findViewById(R.id.okButton).setOnClickListener(v -> {
             dialog.dismiss();
             finish();
         });
-        dialog.show();
-    }
 
-    private void setupMusic() {
-        mediaPlayer = MediaPlayer.create(this, R.raw.playground);
-        if (mediaPlayer != null) {
-            mediaPlayer.setLooping(true);
-            float volume = MainActivity.getGameMusicVolume();
-            mediaPlayer.setVolume(volume, volume);
-            mediaPlayer.start();
-        }
+        dialog.show();
     }
 
     private void showFlash(boolean correct) {
@@ -233,28 +214,60 @@ public class GameActive extends AppCompatActivity {
                 .start();
     }
 
+    // ----------- Lifecycle Methoden für Musikverwaltung ------------
+
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (mediaPlayer != null) mediaPlayer.pause();
+    protected void onStart() {
+        super.onStart();
+        if (!musicManager.isPlaying()) {
+            musicManager.setupMusic(this, false);
+            musicManager.setMenuBoolean(false);
+
+        }
+        System.out.println("ON START GAME");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mediaPlayer != null) mediaPlayer.start();
+        musicManager.onResume();
+        System.out.println("ON RESUME GAME");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        musicManager.onPause();  // Musik pausieren, nicht stoppen
+        System.out.println("ON STOP GAME");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (!musicManager.getMenuBoolean()) {
+            // Muss onPause weil sonst wenn kurz aus App raus läuft Musik nicht weiter sonder startet neu
+            musicManager.onPause();
+            System.out.println("ON STOP GAME");
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(pauseDialog != null && pauseDialog.isShowing()){
+
+        if (timerHandler != null) {
+            timerHandler.removeCallbacks(timerRunnable);
+            timerRunnable = null;
+            timerHandler = null;
+        }
+
+        if (pauseDialog != null && pauseDialog.isShowing()) {
             pauseDialog.dismiss();
+            pauseDialog = null;
         }
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        }
+
+        musicManager.stopMusic();  // Sauberer Shutdown
+        System.out.println("ON DESTROY GAME");
     }
 }
 
