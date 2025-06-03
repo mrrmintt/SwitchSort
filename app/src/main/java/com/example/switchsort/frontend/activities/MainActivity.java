@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private static  MusicManager musicManager = new MusicManager();
     private String gameMode = "CLASSIC"; // CLASSIC or TIME_RUSH
     private String gameContentMode = "NUMBER"; // LETTER or NUMBER
+    private boolean navigatingInternally = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         leaderboardButton.setTypeface(customFont);
         setupButtonAnimation(leaderboardButton);
         leaderboardButton.setOnClickListener(v -> {
+            navigatingInternally = true;
             Intent intent = new Intent(this, LeaderboardActivity.class);
             startActivity(intent);
         });
@@ -233,14 +235,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        musicManager.onPause();  // Musik pausieren wenn Activity nicht mehr im Vordergrund
+        // Wenn keine GameActivity kommt und App nicht geschlossen wird
+        if (!navigatingInternally) {
+            musicManager.onPause();
+        }
+
+        navigatingInternally = false;  // Musik pausieren wenn Activity nicht mehr im Vordergrund
         System.out.println("ON PAUS MAIN");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (musicManager.getMenuBoolean()){
+        if (musicManager.getMenuBoolean()&& navigatingInternally){
         // Muss onPause weil sonst wenn kurz aus App raus läuft Musik nicht weiter sonder startet neu
         musicManager.onPause();
         System.out.println("ON STOP MAIN");
