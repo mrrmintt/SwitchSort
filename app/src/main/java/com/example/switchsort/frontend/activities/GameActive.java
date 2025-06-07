@@ -217,6 +217,14 @@ public class GameActive extends AppCompatActivity {
     // ----------- Lifecycle Methoden für Musikverwaltung ------------
 
     @Override
+    protected void onRestart(){
+        super.onRestart();
+        musicManager.onResume();
+
+        System.out.println("ON RESTART GAME");
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         if (!musicManager.isPlaying()) {
