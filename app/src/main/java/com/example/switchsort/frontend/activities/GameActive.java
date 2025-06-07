@@ -221,6 +221,7 @@ public class GameActive extends AppCompatActivity {
         super.onRestart();
         musicManager.onResume();
 
+        //showPauseMenu();
         System.out.println("ON RESTART GAME");
     }
 
@@ -246,6 +247,8 @@ public class GameActive extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        // wenn man aus app kurz raus geht
+        showPauseMenu();
         musicManager.onPause();  // Musik pausieren, nicht stoppen
         System.out.println("ON STOP GAME");
     }
