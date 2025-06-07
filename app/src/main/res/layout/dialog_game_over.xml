@@ -25,7 +25,7 @@
         android:textSize="20sp"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"
-        />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/finalScore"

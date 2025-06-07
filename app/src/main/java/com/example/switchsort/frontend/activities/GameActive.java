@@ -187,9 +187,11 @@ public class GameActive extends AppCompatActivity {
         TextView gameOverMessage = dialog.findViewById(R.id.gameOverMessage);
         if (gameManager.hasReachedMaxScore()) {
             gameOverMessage.setText("Max Score reached! \nYou beat the game!");
+            gameOverMessage.setVisibility(View.VISIBLE);
         } else {
-            gameOverMessage.setText("Spiel beendet.");
+            gameOverMessage.setVisibility(View.GONE);
         }
+
 
         // Score speichern
         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
