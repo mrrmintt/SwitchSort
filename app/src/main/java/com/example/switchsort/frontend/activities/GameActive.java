@@ -50,6 +50,7 @@ public class GameActive extends AppCompatActivity {
     private String difficulty;
     private String symbol;
     private MusicManager musicManager;
+    private boolean isAppSwitch = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,10 +248,14 @@ public class GameActive extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        // wenn man aus app kurz raus geht
-        showPauseMenu();
-        musicManager.onPause();  // Musik pausieren, nicht stoppen
-        System.out.println("ON STOP GAME");
+
+        if (isAppSwitch) {
+            showPauseMenu(); // Nur zeigen, wenn App durch externen Grund unterbrochen wird
+            isAppSwitch = false; // Reset
+        }
+
+        musicManager.onPause();
+        System.out.println("ON PAUSE GAME");
     }
 
     @Override
@@ -261,6 +266,12 @@ public class GameActive extends AppCompatActivity {
             musicManager.onPause();
             System.out.println("ON STOP GAME");
         }
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        isAppSwitch = true; // Das passiert nur, wenn der User aktiv weggeht (Home, Anruf, etc.)
     }
 
     // Um über den Zürckbutton zum MainMenü zu kommen
