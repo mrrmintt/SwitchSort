@@ -10,7 +10,7 @@ public class ScoreManager {
     private boolean isTimeRush;
 
     // Weil man ein Spiel unendlich lange spielen kann
-    private static final int MAX_SCORE = 500; //1_000_000;
+    private static final int MAX_SCORE = 1_000_000; // zum Testen auf 500 oder so!
     private boolean isMaxScoreReached = false;
 
     public boolean hasReachedMaxScore() {
