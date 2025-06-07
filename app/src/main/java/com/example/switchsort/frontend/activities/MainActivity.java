@@ -50,8 +50,13 @@ public class MainActivity extends AppCompatActivity {
         setupButtonAnimation(settingsButton);
 
 
-
-
+        Button quitButton = findViewById(R.id.quitButton);
+        quitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                quitApp();
+            }
+        });
     }
 
     private void setupDifficultyButtons() {
@@ -200,6 +205,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         dialog.show();
+    }
+
+    private void quitApp() {
+        // Alles beenden
+        finishAffinity(); // Schließt alle Activities im Stack
+
+        // Optional: Prozess hart beenden
+        System.exit(0); // Nicht schön, aber effektiv – vor allem bei Spielen üblich
     }
 
     public static MusicManager getMusicManager(){
