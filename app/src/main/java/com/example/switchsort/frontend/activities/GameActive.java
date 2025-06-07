@@ -179,9 +179,19 @@ public class GameActive extends AppCompatActivity {
     private void showGameOverDialog() {
         Dialog dialog = new Dialog(this, R.style.TransparentDialog);
         dialog.setContentView(R.layout.dialog_game_over);
+
         int finalScore = gameManager.getCurrentScore();
         ((TextView) dialog.findViewById(R.id.finalScore)).setText("Final Score: " + finalScore);
 
+        // Max-Score prüfen
+        TextView gameOverMessage = dialog.findViewById(R.id.gameOverMessage);
+        if (gameManager.hasReachedMaxScore()) {
+            gameOverMessage.setText("Max Score reached! \nYou beat the game!");
+        } else {
+            gameOverMessage.setText("Spiel beendet.");
+        }
+
+        // Score speichern
         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         String playerName = getIntent().getStringExtra("PLAYER_NAME");
         String mode = isTimeRushMode ? "TIME_RUSH" : "CLASSIC";
@@ -198,6 +208,7 @@ public class GameActive extends AppCompatActivity {
 
         dialog.show();
     }
+
 
     private void showFlash(boolean correct) {
         flashOverlay.setBackground(ContextCompat.getDrawable(this, correct ? R.drawable.flash_correct : R.drawable.flash_wrong));

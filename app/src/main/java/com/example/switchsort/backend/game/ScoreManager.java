@@ -9,6 +9,14 @@ public class ScoreManager {
 
     private boolean isTimeRush;
 
+    // Weil man ein Spiel unendlich lange spielen kann
+    private static final int MAX_SCORE = 500; //1_000_000;
+    private boolean isMaxScoreReached = false;
+
+    public boolean hasReachedMaxScore() {
+        return isMaxScoreReached;
+    }
+
     public ScoreManager(String difficulty, boolean isTimeRush) {
         this.difficulty = difficulty;
         this.startTime = System.currentTimeMillis();
@@ -28,6 +36,11 @@ public class ScoreManager {
                 points += 50;  // 3 streak
             }
             currentScore += points;
+            if (currentScore >= MAX_SCORE) {
+                currentScore = MAX_SCORE;
+                // Signalisiert GameManager, dass Schluss ist
+                isMaxScoreReached = true;
+            }
         } else {
             streak = 0;
         }

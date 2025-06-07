@@ -36,10 +36,8 @@ public class GameManager {
     }
 
     public boolean handleUserInput(int position) {
-        System.out.println("POSITION1:"+ position);
+        System.out.println("POSITION1:" + position);
         long timeSpent = (System.currentTimeMillis() - roundStartTime) / 1000;
-
-
 
         boolean correct = gameBoard.checkPosition(position);
         scoreManager.recordMatch(correct, timeSpent);
@@ -47,8 +45,15 @@ public class GameManager {
         if (!correct) {
             lives--;
         }
+
+        // SCORE-LIMIT PRÜFEN
+        if (scoreManager.hasReachedMaxScore()) {
+            isGameOver = true;
+            return true; // oder false, je nach Logik
+        }
+
         if (correct) {
-            if (gameMode){
+            if (gameMode) {
                 addTimeBonus();
             }
             startNewRound();
@@ -56,6 +61,12 @@ public class GameManager {
 
         return correct;
     }
+
+    public boolean hasReachedMaxScore() {
+        return scoreManager.hasReachedMaxScore();
+    }
+
+
     public void addTimeBonus() {
         currentTime += TIME_BONUS;
     }
@@ -63,9 +74,9 @@ public class GameManager {
     public boolean isGameOver() {
         if (gameMode) {
             long timeSpent = (System.currentTimeMillis() - roundStartTime) / 1000;
-            return lives <=0 || currentTime==0;
+            return lives <= 0 || currentTime == 0 || scoreManager.hasReachedMaxScore();
         } else {
-            return lives <= 0;
+            return lives <= 0 || scoreManager.hasReachedMaxScore();
         }
     }
 
