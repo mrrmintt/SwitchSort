@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 
 import com.example.switchsort.R;
-import com.example.switchsort.backend.game.GameManager;
 import com.example.switchsort.backend.game.MusicManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -146,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        Intent intent = new Intent(this, GameActive.class);
+        Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("DIFFICULTY", difficulty);
         intent.putExtra("PLAYER_NAME", playerName);
         intent.putExtra("GAME_MODE", gameMode);

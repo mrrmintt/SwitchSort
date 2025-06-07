@@ -1,5 +1,4 @@
 package com.example.switchsort.frontend.activities;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Dialog;
@@ -25,7 +24,7 @@ import com.example.switchsort.backend.game.GameState;
 import com.example.switchsort.backend.game.MusicManager;
 import com.example.switchsort.frontend.adapters.GridAdapter;
 
-public class GameActive extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
     private GameManager gameManager;
     private GridAdapter gridAdapter;
