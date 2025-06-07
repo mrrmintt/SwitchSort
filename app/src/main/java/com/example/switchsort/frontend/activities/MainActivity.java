@@ -184,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         menuMusicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 musicManager.setMenuVolume(progress);
+                musicManager.updateVolume();
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         gameMusicSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 musicManager.setGameVolume(progress);
-                //gameMusicVolume = progress / 100f;
+
             }
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
@@ -210,7 +211,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestart(){
         super.onRestart();
-        musicManager.onResume();
+        // Abfrage, weil wenn Spiel beendet würde sonst einfach Player gestoppt und hier weiterspielen.
+        if (musicManager.getMenuBoolean()){
+            musicManager.onResume();
+        } else {
+            musicManager.setMenuBoolean(true);
+            musicManager.setupMusic(this, true);
+        }
+
         System.out.println("ON RESTART MAIN");
     }
 
@@ -219,8 +227,10 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Wenn noch keine Musik läuft, dann wird der Player gestartet
         if (!musicManager.isPlaying()) {
-            musicManager.setupMusic(this, true);  // Spiel-Musik starten
+            // Boolean hier setzen weil der sonst nicht checkt, welches Volume er nehmen muss
             musicManager.setMenuBoolean(true);
+            musicManager.setupMusic(this, true);  // Spiel-Musik starten
+
         }
         System.out.println("ON START MAIN");
     }

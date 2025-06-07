@@ -23,7 +23,7 @@ public class MusicManager {
     // Startet Musik
     public void startMusic(){
         mediaPlayer.setLooping(true);
-        mediaPlayer.setVolume(menuVolume, gameVolume);
+        updateVolume();
         mediaPlayer.start();
     }
 
@@ -102,6 +102,13 @@ public class MusicManager {
     }
     public boolean getMenuBoolean(){
         return isMenuBoolean;
+    }
+
+    public void updateVolume() {
+        if (mediaPlayer != null) {
+            float volume = isMenuBoolean ? menuVolume : gameVolume;
+            mediaPlayer.setVolume(volume, volume);
+        }
     }
 
 }

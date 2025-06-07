@@ -220,8 +220,9 @@ public class GameActive extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (!musicManager.isPlaying()) {
-            musicManager.setupMusic(this, false);
             musicManager.setMenuBoolean(false);
+            musicManager.setupMusic(this, false);
+
 
         }
         System.out.println("ON START GAME");
