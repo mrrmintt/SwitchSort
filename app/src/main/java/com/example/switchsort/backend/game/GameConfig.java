@@ -8,6 +8,8 @@ public class GameConfig {
     public static final int MEDIUM_TIME_LIMIT = 45;
     public static final int HARD_TIME_LIMIT = 30;
 
+
+    // Holt Spielfeldgröße auf Schwieriegkeit basierend
     public static int getGridSize(String difficulty) {
         switch (difficulty.toUpperCase()) {
             case "MEDIUM":
@@ -18,6 +20,8 @@ public class GameConfig {
                 return EASY_GRID_SIZE;
         }
     }
+
+    // Holt Timelimit basierend auf Schwioereigkeit
     public static int getTimeLimit(String difficulty) {
         switch (difficulty.toUpperCase()) {
             case "MEDIUM":

@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-
         playerNameInput = findViewById(R.id.playerNameInput);
 
         setupDifficultyButtons();
@@ -211,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         finishAffinity(); // Schließt alle Activities im Stack
 
         // Optional: Prozess hart beenden
-        System.exit(0); // Nicht schön, aber effektiv – vor allem bei Spielen üblich
+        System.exit(0);
     }
 
     public static MusicManager getMusicManager(){

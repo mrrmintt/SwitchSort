@@ -1,5 +1,6 @@
 package com.example.switchsort.backend.game;
 
+// Datenklasse für den aktuellen Zustand des Spiels
 public class GameState {
     private final String[] board;
     private final String targetCharacter;
@@ -10,6 +11,9 @@ public class GameState {
     private final int streak;
     private final String timerText;
 
+
+
+    // Konstruktor initialisiert alle Felder
     public GameState(String[] board, String targetCharacter, int lives, int currentScore,
                       int streak, String timerText) {
         this.board = board;

@@ -13,55 +13,67 @@ public class ScoreManager {
     private static final int MAX_SCORE = 1_000_000; // zum Testen auf 500 oder so!
     private boolean isMaxScoreReached = false;
 
+    // Gibt zurück, ob der Maximalpunktestand erreicht wurde
     public boolean hasReachedMaxScore() {
         return isMaxScoreReached;
     }
 
+    // Konstruktor – setzt Schwierigkeitsgrad und ob der Modus Timerush ist
     public ScoreManager(String difficulty, boolean isTimeRush) {
         this.difficulty = difficulty;
         this.startTime = System.currentTimeMillis();
         this.isTimeRush = isTimeRush;
     }
+
+    // Verarbeitet das Ergebnis eines Versuchs (richtig/falsch) und berechnet Punkte
     public void recordMatch(boolean correct, long timeSpentInSeconds) {
         if (correct) {
             int points = calculatePoints(timeSpentInSeconds);
             correctMatches++;
             streak++;
-            // Add streak bonuses
+
+            // Bonuspunkte bei Serien (Multiples von 3, 5, 10)
             if (streak % 10 == 0) {
-                points += 200; // 10 streak
+                points += 200;
             } else if (streak % 5 == 0) {
-                points += 100; // 5 streak
+                points += 100;
             } else if (streak % 3 == 0) {
-                points += 50;  // 3 streak
+                points += 50;
             }
+
             currentScore += points;
+
+            // Maximalpunktzahl erreicht → Spiel beenden
             if (currentScore >= MAX_SCORE) {
                 currentScore = MAX_SCORE;
-                // Signalisiert GameManager, dass Schluss ist
                 isMaxScoreReached = true;
             }
         } else {
-            streak = 0;
+            streak = 0; // Serie bei Fehler resetten
         }
     }
+
+    // Berechnet Punkte anhand von Schwierigkeit und Zeit (je schneller, desto mehr)
     private int calculatePoints(long timeSpentInSeconds) {
         int basePoints = 100;
         float multiplier = getDifficultyMultiplier();
         float speedMultiplier = getSpeedMultiplier(timeSpentInSeconds);
-
         return (int)(basePoints * multiplier * speedMultiplier);
     }
+
+    // Gibt Multiplikator basierend auf Schwierigkeitsgrad zurück
     private float getDifficultyMultiplier() {
         switch (difficulty) {
             case "HARD":
                 return 2.0f;
             case "MEDIUM":
                 return 1.5f;
-            default:
+            default: // EASY oder unbekannt
                 return 1.0f;
         }
     }
+
+    // Gibt Geschwindigkeits-Multiplikator zurück (je schneller geantwortet, desto höher)
     private float getSpeedMultiplier(long timeSpentInSeconds) {
         switch (difficulty) {
             case "HARD":
@@ -81,10 +93,14 @@ public class ScoreManager {
         }
     }
 
+    // Gibt aktuellen Punktestand zurück
     public int getCurrentScore() {
         return currentScore;
     }
+
+    // Gibt aktuelle Treffer-Serie zurück
     public int getStreak() {
         return streak;
     }
+
 }

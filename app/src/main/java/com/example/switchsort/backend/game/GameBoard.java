@@ -69,35 +69,33 @@ public class GameBoard {
     }
 
 
-
+    // Gibt das 2D-Spielbrett als eindimensionales Array zurück
     public String[] getFlatBoard() {
-        String[] flat = new String[size * size];
+        String[] flat = new String[size * size]; // Neues Array für flache Darstellung
         int index = 0;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                flat[index++] = board[i][j];
+                flat[index++] = board[i][j]; // Elemente zeilenweise einfügen
             }
         }
         return flat;
     }
 
+    // Gibt das Zeichen an einer bestimmten Position im flachen Board zurück
     public String getCharacterAt(int position) {
-        return board[position / size][position % size];
+        return board[position / size][position % size]; // Zeile = position / size, Spalte = position % size
     }
 
+    // Gibt das Zielzeichen zurück, nach dem gesucht wird
     public String getTargetCharacter() {
         return targetCharacter;
     }
 
+    // Prüft, ob die gegebene Position der Zielposition entspricht
     public boolean checkPosition(int position) {
-        System.out.println("POSITION:"+ position);
-        System.out.println("TARGETPOSITION:"+ targetPosition);
+        System.out.println("POSITION:" + position);
+        System.out.println("TARGETPOSITION:" + targetPosition);
         return position == targetPosition;
     }
-
-    public int getSize() {
-        return size;
-    }
-
 
 }
