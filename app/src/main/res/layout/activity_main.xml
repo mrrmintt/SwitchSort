@@ -9,7 +9,7 @@
         android:src="@drawable/background"
         android:scaleType="center"
         android:adjustViewBounds="true"
-        android:contentDescription="Background image"/>
+        android:contentDescription="BackgroundImage"/>
 
     <!-- Settings Button -->
     <ImageButton

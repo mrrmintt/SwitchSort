@@ -209,18 +209,17 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void showGameOverDialog() {
-        // Dialog mit transparentem Stil erzeugen und Layout setzen
         Dialog dialog = new Dialog(this, R.style.TransparentDialog);
         dialog.setContentView(R.layout.dialog_game_over);
 
-        // Finalen Punktestand holen und anzeigen
+        // Wichtig: Dialog darf nicht durch Touch außerhalb oder Back-Button geschlossen werden
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+
         int finalScore = gameManager.getCurrentScore();
         ((TextView) dialog.findViewById(R.id.finalScore)).setText("Final Score: " + finalScore);
 
-        // TextView für Game Over Nachricht holen
         TextView gameOverMessage = dialog.findViewById(R.id.gameOverMessage);
-
-        // Wenn Max-Score erreicht, passende Nachricht anzeigen, sonst ausblenden
         if (gameManager.hasReachedMaxScore()) {
             gameOverMessage.setText("Max Score reached! \nYou beat the game!");
             gameOverMessage.setVisibility(View.VISIBLE);
@@ -228,24 +227,21 @@ public class GameActivity extends AppCompatActivity {
             gameOverMessage.setVisibility(View.GONE);
         }
 
-        // Spieler-Infos für Score-Speicherung vorbereiten
         String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         String playerName = getIntent().getStringExtra("PLAYER_NAME");
         String mode = isTimeRushMode ? "TIME_RUSH" : "CLASSIC";
         Player player = new Player(playerName, deviceId, finalScore, difficulty, mode);
 
-        // Nur speichern, wenn Score > 0
         if (finalScore > 0) {
             new DatabaseHelper(this).addScore(player);
         }
 
-        // OK-Button: Dialog schließen und Activity beenden (zurück zum Menü)
         dialog.findViewById(R.id.okButton).setOnClickListener(v -> {
             dialog.dismiss();
             finish();
         });
 
-        dialog.show(); // Dialog anzeigen
+        dialog.show();
     }
 
 

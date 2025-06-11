@@ -11,7 +11,6 @@ public class RandomGenerator {
     private static final String LATIN_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String GREEK_CHARS = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
     private static final String ARABIC_CHARS = "أبتثجحخدذرزسشصضطظعغفقكلمنهوي";
-    private static final String NUMBERS = "0123456789";
 
     // Zahlen
     private final String[] latinNumbers = {

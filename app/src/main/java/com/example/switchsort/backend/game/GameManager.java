@@ -89,6 +89,8 @@ public class GameManager {
         }
     }
 
+
+
     // Verringert die aktuelle Zeit in TIMERUSH-Modus
     public void updateTimer() {
         currentTime -= 0.1;
