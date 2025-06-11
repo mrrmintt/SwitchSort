@@ -3,41 +3,78 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Background Image - Fixed scaling -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/background"
-        android:scaleType="center"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:contentDescription="BackgroundImage"/>
 
-    <!-- Settings Button -->
     <ImageButton
         android:id="@+id/settingsButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/button_size_small"
+        android:layout_height="@dimen/button_size_small"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="@dimen/top_margin_medium"
+        android:layout_marginEnd="@dimen/standard_margin"
         android:src="@drawable/settings"
         android:background="@drawable/rounded_button"
-        android:padding="8dp"
+        android:padding="@dimen/small_margin"
         android:scaleType="fitCenter"
         android:contentDescription="Settings"/>
 
-    <!-- Buttons Layout -->
-
     <Button
         android:id="@+id/quitButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="336dp"
+        android:layout_width="@dimen/button_size_small"
+        android:layout_height="@dimen/button_size_small"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="@dimen/top_margin_medium"
+        android:layout_marginStart="@dimen/standard_margin"
         android:background="@drawable/rounded_button"
-        android:padding="8dp"
-        android:text="Quit" />
+        android:padding="@dimen/small_margin"
+        android:text="Quit"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/text_size_small" />
 
+    <!-- Player Name Input Section -->
+    <LinearLayout
+        android:id="@+id/nameSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/buttonLayout"
+        android:layout_marginBottom="@dimen/large_margin"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/nameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/small_margin"
+            android:text="Your Name"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/text_size_large"
+            android:fontFamily="@font/rubik"/>
+
+        <EditText
+            android:id="@+id/playerNameInput"
+            android:layout_width="@dimen/input_width"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FFFFFF"
+            android:textColor="#000000"
+            android:fontFamily="@font/rubik"
+            android:gravity="center"
+            android:padding="@dimen/button_padding"
+            android:maxLines="1"
+            android:maxLength="20"
+            android:inputType="textPersonName"
+            android:background="@drawable/edit_text_background"
+            android:hint="Name Input"/>
+    </LinearLayout>
+
+    <!-- Main Buttons Layout -->
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
@@ -45,122 +82,107 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_centerInParent="true"
-        android:padding="16dp">
+        android:padding="@dimen/standard_margin">
 
+        <!-- Difficulty Buttons -->
         <Button
             android:id="@+id/buttonEasy"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
             android:text="Easy (3x3)"
             android:textColor="#FFFFFF"
+            android:textSize="@dimen/text_size_medium"
             android:background="@drawable/rounded_button"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="@dimen/standard_margin"/>
 
         <Button
             android:id="@+id/buttonMedium"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
             android:text="Medium (5x5)"
             android:textColor="#FFFFFF"
+            android:textSize="@dimen/text_size_medium"
             android:background="@drawable/rounded_button"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="@dimen/standard_margin"/>
 
         <Button
             android:id="@+id/buttonHard"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_width"
+            android:layout_height="@dimen/button_height"
             android:text="Hard (7x7)"
             android:textColor="#FFFFFF"
+            android:textSize="@dimen/text_size_medium"
             android:background="@drawable/rounded_button"
-            android:layout_marginBottom="16dp"/>
-        <!-- Game Mode Buttons -->
+            android:layout_marginBottom="@dimen/standard_margin"/>
 
+        <!-- Game Mode Buttons Row -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="@dimen/standard_margin">
 
             <Button
                 android:id="@+id/buttonNumber"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/button_width_half"
+                android:layout_height="@dimen/button_height"
                 android:text="Number"
                 android:textColor="#FFFFFF"
+                android:textSize="@dimen/text_size_medium"
                 android:background="@drawable/rounded_button"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="@dimen/small_margin"/>
 
             <Button
                 android:id="@+id/buttonLetter"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/button_width_half"
+                android:layout_height="@dimen/button_height"
                 android:text="Letter"
                 android:textColor="#FFFFFF"
+                android:textSize="@dimen/text_size_medium"
                 android:background="@drawable/rounded_button"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginStart="@dimen/small_margin"/>
         </LinearLayout>
+
+        <!-- Classic/Time Rush Buttons Row -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="@dimen/standard_margin">
 
             <Button
                 android:id="@+id/buttonClassic"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/button_width_half"
+                android:layout_height="@dimen/button_height"
                 android:text="Classic"
                 android:textColor="#FFFFFF"
+                android:textSize="@dimen/text_size_medium"
                 android:background="@drawable/rounded_button"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="@dimen/small_margin"/>
 
             <Button
                 android:id="@+id/buttonTimeRush"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/button_width_half"
+                android:layout_height="@dimen/button_height"
                 android:text="Time Rush"
                 android:textColor="#FFFFFF"
+                android:textSize="@dimen/text_size_medium"
                 android:background="@drawable/rounded_button"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginStart="@dimen/small_margin"/>
         </LinearLayout>
     </LinearLayout>
+
+    <!-- Leaderboard Button -->
     <Button
         android:id="@+id/buttonLeaderboard"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
         android:text="Leaderboard"
         android:textColor="#FFFFFF"
+        android:textSize="@dimen/text_size_medium"
         android:background="@drawable/rounded_button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"/>
-    <TextView
-        android:id="@+id/nameLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/playerNameInput"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
-        android:text="Your Name"
-        android:textColor="#FFFFFF"
-        android:textSize="25sp"
-        android:fontFamily="@font/rubik"/>
-    <EditText
-        android:id="@+id/playerNameInput"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/buttonLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:textColorHint="#FFFFFF"
-        android:textColor="#000000"
-        android:fontFamily="@font/rubik"
-        android:gravity="center"
-        android:padding="12dp"
-        android:maxLines="1"
-        android:maxLength="20"
-        android:inputType="textPersonName"
-        android:background="@drawable/edit_text_background"
-        android:hint="Name Input"/>
+        android:layout_marginBottom="@dimen/large_margin"/>
 
 </RelativeLayout>

@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.switchsort">
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <!-- Support different screen sizes -->
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:anyDensity="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,24 +20,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
 
-        <!-- This is your MAIN activity - it's the entry point -->
+        <!-- Main activity with responsive orientation -->
         <activity
             android:name=".frontend.activities.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Your game activity -->
+        <!-- Game activity with locked portrait -->
         <activity
             android:name=".frontend.activities.GameActivity"
             android:theme="@style/Theme.SwitchSort"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <!-- Leaderboard activity -->
         <activity
             android:name=".frontend.activities.LeaderboardActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
 
     </application>
 </manifest>
