@@ -3,61 +3,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Background Image -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/background"
-        android:scaleType="center"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
         android:contentDescription="Background image"/>
-    <TextView
-        android:id="@+id/timerText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="150dp"
-        android:layout_marginEnd="16dp"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:fontFamily="@font/rubik"
-        android:visibility="gone"/>
-    <!-- Game Content -->
+
+    <!-- Game Content Container -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="@dimen/standard_margin">
+
+        <TextView
+            android:id="@+id/timerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/top_margin_medium"
+            android:layout_marginEnd="@dimen/standard_margin"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/text_size_large"
+            android:fontFamily="@font/rubik"
+            android:visibility="gone"/>
+
         <ImageButton
             android:id="@+id/pauseButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/button_size_small"
+            android:layout_height="@dimen/button_size_small"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="60dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_below="@id/timerText"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginEnd="@dimen/standard_margin"
+            android:layout_marginBottom="@dimen/standard_margin"
             android:src="@android:drawable/ic_media_pause"
             android:background="@drawable/rounded_button"
-            android:padding="12dp"
+            android:padding="@dimen/button_padding"
             android:scaleType="fitCenter"
             android:contentDescription="Pause"/>
-        <!-- Score and Streak Display -->
+
         <LinearLayout
             android:id="@+id/scoreLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:layout_marginTop="60dp">
+            android:padding="@dimen/standard_margin"
+            android:layout_marginTop="@dimen/top_margin_medium">
 
             <TextView
                 android:id="@+id/scoreView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_medium"
                 android:fontFamily="@font/rubik"
                 android:text="Score: 0"/>
 
@@ -66,67 +69,72 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_size_medium"
                 android:fontFamily="@font/rubik"
                 android:text="Streak: 0"/>
+
             <TextView
                 android:id="@+id/livesView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/small_margin"
                 android:fontFamily="@font/rubik"
                 android:text="Lives: 3"
                 android:textColor="#FFFFFF"
-                android:textSize="24sp" />
+                android:textSize="@dimen/text_size_large" />
         </LinearLayout>
 
-        <!-- Target Letter -->
         <TextView
             android:id="@+id/targetLetter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/scoreLayout"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="20dp"
-            android:textSize="48sp"
+            android:layout_marginBottom="@dimen/small_margin"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:textSize="@dimen/text_size_xlarge"
             android:textColor="#FFFFFF"/>
 
-        <!-- Grid with Buttons -->
-        <GridView
-            android:id="@+id/gameGrid"
+        <FrameLayout
+            android:id="@+id/gridContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
             android:layout_below="@id/targetLetter"
-            android:layout_marginTop="100dp"
-            android:horizontalSpacing="8dp"
-            android:verticalSpacing="8dp"
-            android:gravity="center"/>
+            android:layout_marginTop="@dimen/medium_margin"
+            android:layout_above="@id/timerLabel">
 
-        <!-- Round Counter -->
+            <GridView
+                android:id="@+id/gameGrid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:horizontalSpacing="@dimen/grid_spacing"
+                android:verticalSpacing="@dimen/grid_spacing"
+                android:gravity="center"/>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/timerLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/standard_margin"
+            android:layout_marginEnd="@dimen/standard_margin"
+            android:layout_marginStart="@dimen/standard_margin"
             android:text="Time: 30s"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size_large"
             android:fontFamily="@font/rubik"
             android:visibility="gone"/>
+
         <!-- Flash Overlay -->
         <View
             android:id="@+id/flashOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/small_margin"
             android:visibility="invisible"/>
 
     </RelativeLayout>
