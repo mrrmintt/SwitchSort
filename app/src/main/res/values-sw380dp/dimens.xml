@@ -18,10 +18,10 @@
     <dimen name="button_size_small">48dp</dimen>
     <dimen name="button_padding">12dp</dimen>
 
-    <dimen name="button_size_search_small">150dp</dimen>
-    <dimen name="button_size_search_large">120dp</dimen>
+    <dimen name="button_size_search_small">70dp</dimen>
+    <dimen name="button_size_search_large">50dp</dimen>
 
-    <dimen name="input_width">200dp</dimen>
+    <dimen name="input_width">240dp</dimen>
 
 
     <dimen name="text_size_small">12sp</dimen>

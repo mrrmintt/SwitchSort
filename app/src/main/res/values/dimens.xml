@@ -28,7 +28,7 @@
     <dimen name="text_size_large">18sp</dimen>
     <dimen name="text_size_xslarge">25sp</dimen>
     <dimen name="text_size_xlarge">36sp</dimen>
-
+    <dimen name="falsh_small">20dp</dimen>
 
     <dimen name="grid_spacing">6dp</dimen>
 </resources>

@@ -28,8 +28,8 @@
     <dimen name="text_size_xlarge">64sp</dimen>
 
 
-    <dimen name="button_size_search_small">200dp</dimen>
-    <dimen name="button_size_search_large">180dp</dimen>
+    <dimen name="button_size_search_small">90dp</dimen>
+    <dimen name="button_size_search_large">75dp</dimen>
 
     <dimen name="grid_spacing">12dp</dimen>
 </resources>
