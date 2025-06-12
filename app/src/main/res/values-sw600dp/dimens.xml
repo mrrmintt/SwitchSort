@@ -4,28 +4,32 @@
     <dimen name="standard_margin">24dp</dimen>
     <dimen name="small_margin">12dp</dimen>
     <dimen name="medium_margin">32dp</dimen>
-    <dimen name="large_margin">48dp</dimen>
+    <dimen name="large_margin">0dp</dimen>
 
 
-    <dimen name="top_margin_medium">80dp</dimen>
-    <dimen name="top_margin_large">120dp</dimen>
+    <dimen name="top_margin_medium">60dp</dimen>
+    <dimen name="top_margin_large">80dp</dimen>
 
 
     <dimen name="button_width">300dp</dimen>
     <dimen name="button_width_half">145dp</dimen>
     <dimen name="button_height">60dp</dimen>
-    <dimen name="button_size_small">60dp</dimen>
+    <dimen name="button_size_small">70dp</dimen>
     <dimen name="button_padding">16dp</dimen>
 
 
     <dimen name="input_width">300dp</dimen>
 
 
-    <dimen name="text_size_small">16sp</dimen>
+    <dimen name="text_size_small">15sp</dimen>
     <dimen name="text_size_medium">20sp</dimen>
     <dimen name="text_size_large">28sp</dimen>
+    <dimen name="text_size_xslarge">30sp</dimen>
     <dimen name="text_size_xlarge">64sp</dimen>
 
+
+    <dimen name="button_size_search_small">200dp</dimen>
+    <dimen name="button_size_search_large">180dp</dimen>
 
     <dimen name="grid_spacing">12dp</dimen>
 </resources>

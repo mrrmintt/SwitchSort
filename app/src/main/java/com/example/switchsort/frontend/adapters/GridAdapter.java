@@ -36,11 +36,12 @@ public class GridAdapter extends BaseAdapter {
 
             // Dynamische Buttongröße basierend auf Spielfeldgröße
             int buttonSize;
-            if (gridSize == 7){
-                buttonSize = 120;
-            } else{
-                buttonSize = 150;
+            if (gridSize == 7) {
+                buttonSize = (int) context.getResources().getDimension(R.dimen.button_size_search_large);
+            } else {
+                buttonSize = (int) context.getResources().getDimension(R.dimen.button_size_search_small);
             }
+            button.setLayoutParams(new ViewGroup.LayoutParams(buttonSize, buttonSize));
 
 
             button.setLayoutParams(new ViewGroup.LayoutParams(buttonSize, buttonSize));
